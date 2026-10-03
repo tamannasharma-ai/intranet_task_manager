@@ -1,0 +1,13 @@
+﻿name,email,role,manager_email
+R S Rana,Rana@thdc.co.in,GM-HOD,
+Karan Bargali,Bargali@thdc.co.in,DGM,Rana@thdc.co.in
+Anil Raj,Raj@thdc.co.in,DGM,Rana@thdc.co.in
+Shubhendu Raghav,Raghav@thdc.co.in,SM,Raj@thdc.co.in
+Pradeep Kumar,Kumar@thdc.co.in,Manager,Bargali@thdc.co.in
+Ravi Shankar,Shankar@thdc.co.in,AM,Bargali@thdc.co.in
+Adarsh Kushwaha,Kushwaha@thdc.co.in,AM,Bargali@thdc.co.in
+Vikram Meena,Meena@thdc.co.in,AM,Bargali@thdc.co.in
+Kartik Rana,Rana@thdc.co.in,AM,Raj@thdc.co.in
+Govinda,Govinda@thdc.co.in,AM,Bargali@thdc.co.in
+Amandeep,Amandeep@thdc.co.in,AM,Raj@thdc.co.in
+Nitin Panwar,Panwar@thdc.co.in,AM,Raghav@thdc.co.in

@@ -1,0 +1,101 @@
+{"timestamp":"2026-10-03T06:28:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"258f99c9a3c94ee799ccfc7a3d8aeeb4","method":"GET","path":"/api/health","status_code":200,"duration_ms":2.74,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:14940 - "GET /api/health HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:04Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"94fa89883389465eb7a630fd78368ef7","method":"GET","path":"/api/health","status_code":200,"duration_ms":1.48,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/health HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:10Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a5eb76320146496992117bf2b748e139","method":"GET","path":"/api/users","status_code":401,"duration_ms":18.2,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9327 - "GET /api/users HTTP/1.1" 401 Unauthorized
+{"timestamp":"2026-10-03T06:28:10Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"1d9b605d032e425d99af8157fa620bb1","method":"POST","path":"/api/auth/logout","status_code":200,"duration_ms":1.88,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9327 - "POST /api/auth/logout HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:10Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"bd76774ad07c4960b123a06741db429d","method":"GET","path":"/api/auth/users","status_code":200,"duration_ms":8.99,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9327 - "GET /api/auth/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:16Z","level":"INFO","logger":"continuum","message":"Activity event","event":"LOGIN_FAILURE"}
+{"timestamp":"2026-10-03T06:28:16Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"18909469846b4f8b858f21ec7653247f","method":"POST","path":"/api/auth/login","status_code":400,"duration_ms":560.47,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "POST /api/auth/login HTTP/1.1" 400 Bad Request
+{"timestamp":"2026-10-03T06:28:20Z","level":"INFO","logger":"continuum","message":"Activity event","event":"LOGIN_SUCCESS"}
+{"timestamp":"2026-10-03T06:28:20Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a4f4e7aec97b450f80c7f698be14705f","method":"POST","path":"/api/auth/login","status_code":200,"duration_ms":336.58,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "POST /api/auth/login HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:20Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"3d6cae19051c4b08b11497d48422bc4f","method":"GET","path":"/api/users","status_code":200,"duration_ms":10.1,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:20Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"4399463099384d179ad691ca0a51c14e","method":"GET","path":"/api/categories","status_code":200,"duration_ms":8.06,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:21Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"320d424cb0b140d1a6565d8db09ea93a","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":39.31,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b09ccd073bbb454ebde50f10173604a6","method":"GET","path":"/api/ai/config","status_code":200,"duration_ms":7.72,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "GET /api/ai/config HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e2acc9ad4a2e4a2ebb83f0501b4a26fc","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":72.33,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "GET /api/reports/tasks HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:27Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e409b43a2b114cb3bee1b9e5f2dfbeb2","method":"POST","path":"/api/ai/chat","status_code":200,"duration_ms":550.74,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3807 - "POST /api/ai/chat HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"f3003e57160d41faaed599cc6183c99e","method":"POST","path":"/api/ai/chat","status_code":200,"duration_ms":1521.94,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:6076 - "POST /api/ai/chat HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:53Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6d56e87f6a2e4f59950b52ceac77b005","method":"GET","path":"/login.html","status_code":200,"duration_ms":59.03,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /login.html HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:28:53Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"3425327aad3d4975aba8f5c2939d334d","method":"GET","path":"/api/auth/users","status_code":200,"duration_ms":3.34,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/auth/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"8cf19473ccba4f84ada7ae9091da934a","method":"GET","path":"/","status_code":303,"duration_ms":1.77,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET / HTTP/1.1" 303 See Other
+{"timestamp":"2026-10-03T06:32:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"4524c97a681d4fa3969d02ebb2b4ca11","method":"GET","path":"/login.html","status_code":200,"duration_ms":1.18,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /login.html HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2685caae65674833b76df74440e9cdf2","method":"GET","path":"/vendor/tailwindcdn.js","status_code":200,"duration_ms":1.8,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /vendor/tailwindcdn.js HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a739bd95f7eb4f7f8d1c5f960cbbb2bf","method":"GET","path":"/vendor/fontawesome/css/all.min.css","status_code":200,"duration_ms":1.85,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /vendor/fontawesome/css/all.min.css HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"279c575eab764330ba9a839b98f9a8b5","method":"GET","path":"/api/auth/users","status_code":200,"duration_ms":6.13,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /api/auth/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"1aebc4fd2b80452caae2ea7ef3a6c99a","method":"GET","path":"/vendor/fontawesome/webfonts/fa-solid-900.woff2","status_code":200,"duration_ms":2.11,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /vendor/fontawesome/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"222c933941894c96826fb6a980ea4042","method":"GET","path":"/favicon.ico","status_code":404,"duration_ms":0.38,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+{"timestamp":"2026-10-03T06:32:46Z","level":"INFO","logger":"continuum","message":"Activity event","event":"LOGIN_SUCCESS"}
+{"timestamp":"2026-10-03T06:32:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a36f086daa7a4989a98f7cc911047a76","method":"POST","path":"/api/auth/login","status_code":200,"duration_ms":375.42,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "POST /api/auth/login HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"5bf65f9c869d44de9c46a848b25f7a99","method":"GET","path":"/dashboard","status_code":200,"duration_ms":4.7,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"3b5cf253797540e0b85f95a3d1e6a577","method":"GET","path":"/api/users","status_code":200,"duration_ms":7.19,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a17ec7259db043c5be3e0ccd1d17d384","method":"GET","path":"/api/categories","status_code":200,"duration_ms":4.17,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"59211c40c90240588645bed98391b382","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":19.08,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:32:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"1a8d26a376424bd6a050217fbeedacd1","method":"GET","path":"/vendor/fontawesome/webfonts/fa-regular-400.woff2","status_code":200,"duration_ms":1.99,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /vendor/fontawesome/webfonts/fa-regular-400.woff2 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:33:45Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d0a2e039519248349d603c53b613c08d","method":"GET","path":"/api/ai/config","status_code":200,"duration_ms":5.25,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /api/ai/config HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:33:45Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"cfef5a5f22964ccbbc4107a87e1d9331","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":20.58,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /api/reports/tasks HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:33:54Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"3862a8d949954a06acbafbb84d7061c6","method":"POST","path":"/api/ai/chat","status_code":200,"duration_ms":880.07,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "POST /api/ai/chat HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:34:18Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6eff6ce3041f42759d81879ef0c89a5c","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":16.16,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /api/reports/tasks?status=all&priority=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:41:14Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6d7d03fc3cf94015ba0d79fcf43f8327","method":"POST","path":"/api/ai/chat","status_code":200,"duration_ms":676.53,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:2600 - "POST /api/ai/chat HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:41:26Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"0f10174ab4924bb1b7ef1bbd3d754dc0","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":34.41,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:12389 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:18Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e1055c6fa6ce483793290187ec6d66c9","method":"GET","path":"/api/ai/config","status_code":200,"duration_ms":5.76,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/ai/config HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:18Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b4c4b8cab0d84090b1184da3943afac1","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":23.4,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/reports/tasks HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:19Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"01246b264a374e4b839777dea643935a","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":29.27,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/reports/tasks?status=all&priority=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:21Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6d4aee0ef5234629b989ea95bb7e3153","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":31.2,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/tasks?filter_type=personal HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"76f1d80f52964834b01e2896000f616d","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":28.92,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/tasks?filter_type=assigned-by-ro HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:23Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"c7438f18de84482baa98f173d6780746","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":37.53,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/tasks?filter_type=delegated-by-me HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:25Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"881239c957724364bb1f49a76ddf2a4b","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":53.21,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/tasks?filter_type=team-hierarchy HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:42:29Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"c91a8e3026cf4d1e9dddee63b799b59a","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":34.37,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9870 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:45:10Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"94886110fb0b4b8fb6975d4c2cded388","method":"GET","path":"/login.html","status_code":200,"duration_ms":1.71,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /login.html HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:45:10Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"8547a5de8dbb493399f82f73b7f47237","method":"GET","path":"/api/auth/users","status_code":200,"duration_ms":6.3,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/auth/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:57:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"26bcf4887af9414aa17a0ffda807866a","method":"GET","path":"/dashboard","status_code":200,"duration_ms":59.71,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:8630 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:57:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a22b9aefdb0a4425983c2f872dbe8c62","method":"GET","path":"/api/users","status_code":200,"duration_ms":26.96,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:8630 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:57:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"794fdb1a208549c1bbd67347f1079a57","method":"GET","path":"/api/categories","status_code":200,"duration_ms":9.11,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:8630 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T06:57:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2add8704e19d45c8963068a78cd94be6","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":16.73,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:8630 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK

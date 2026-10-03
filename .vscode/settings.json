@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^python -c \"from pathlib import Path; p=Path\\(r'C:\\\\Users\\\\shubh\\\\Desktop\\\\intranet_task_manager\\\\app\\\\static\\\\index\\.html'\\);\nfor i,line in enumerate\\(p\\.read_text\\(encoding='utf-8'\\)\\.splitlines\\(\\),1\\):\n    if 'localStorage\\.getItem' in line or 'localStorage\\.setItem' in line or 'Authorization' in line or 'authToken' in line or 'Bearer' in line:\n        print\\(f'\\{i\\}: \\{line\\}'\\)\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

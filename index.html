@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Continuum</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Free Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- TOP NAVIGATION / IDENTITY BAR -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold shadow-xs">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Continuum</h1>
+          <p class="text-xs text-slate-500">Lifecycle Tracking & Reporting Officer Delegation</p>
+        </div>
+      </div>
+
+      <!-- Identity Switcher -->
+      <div class="flex items-center space-x-3">
+        <div class="text-right hidden sm:block">
+          <p id="current-user-name" class="text-sm font-semibold text-slate-800">Alex Carter</p>
+          <p id="current-user-designation" class="text-xs text-indigo-600 font-medium">Reporting Officer (RO)</p>
+        </div>
+        <select id="user-selector" onchange="switchUser(this.value)" class="text-xs bg-slate-100 border border-slate-300 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
+          <option value="alex@internal.net">Login: Alex Carter (Reporting Officer)</option>
+          <option value="priya@internal.net">Login: Priya Patel (Junior Engineer)</option>
+          <option value="marcus@internal.net">Login: Marcus Vance (Junior Ops Officer)</option>
+        </select>
+        <div class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm border border-indigo-200" id="user-avatar">
+          AC
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- KPI CARDS -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Tasks</p>
+          <p id="kpi-total" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider">In Progress</p>
+          <p id="kpi-progress" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+          <i class="fa-solid fa-spinner"></i>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Completed</p>
+          <p id="kpi-done" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold text-indigo-600 uppercase tracking-wider">Delegated by You</p>
+          <p id="kpi-delegated" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+          <i class="fa-solid fa-user-check"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTION / VIEW TABS -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+      <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+        <button onclick="setFilter('all')" id="tab-all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-xs transition">My Desk</button>
+        <button onclick="setFilter('assigned-by-ro')" id="tab-assigned-by-ro" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Assigned by RO</button>
+        <button onclick="setFilter('shared')" id="tab-shared" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Shared with Me</button>
+        <button onclick="setFilter('team-hierarchy')" id="tab-team" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-users-gear text-xs"></i>
+          <span>Direct Reportees Workload</span>
+        </button>
+      </div>
+
+      <!-- RO Filter Sub-Menu -->
+      <div id="ro-filter-container" class="hidden flex items-center space-x-2 w-full md:w-auto">
+        <span class="text-xs font-medium text-slate-500 whitespace-nowrap">Filter Junior:</span>
+        <select id="junior-filter-select" onchange="renderBoard()" class="text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+          <option value="all">All Direct Reportees</option>
+        </select>
+      </div>
+
+      <button onclick="openModal()" class="w-full md:w-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-xs flex items-center justify-center space-x-2 transition">
+        <i class="fa-solid fa-plus text-xs"></i>
+        <span>Create / Assign Task</span>
+      </button>
+    </div>
+
+    <!-- KANBAN BOARD -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <!-- TO DO -->
+      <div class="bg-slate-100/90 rounded-xl p-4 border border-slate-200 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            <h2 class="font-bold text-sm text-slate-700">To Do</h2>
+          </div>
+          <span id="badge-todo" class="text-xs bg-slate-200 px-2 py-0.5 rounded-full text-slate-600 font-semibold">0</span>
+        </div>
+        <div id="col-todo" class="space-y-3 flex-1 overflow-y-auto"></div>
+      </div>
+
+      <!-- IN PROGRESS -->
+      <div class="bg-slate-100/90 rounded-xl p-4 border border-slate-200 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            <h2 class="font-bold text-sm text-slate-700">In Progress</h2>
+          </div>
+          <span id="badge-inprogress" class="text-xs bg-amber-100 px-2 py-0.5 rounded-full text-amber-700 font-semibold">0</span>
+        </div>
+        <div id="col-inprogress" class="space-y-3 flex-1 overflow-y-auto"></div>
+      </div>
+
+      <!-- DONE -->
+      <div class="bg-slate-100/90 rounded-xl p-4 border border-slate-200 flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <h2 class="font-bold text-sm text-slate-700">Done</h2>
+          </div>
+          <span id="badge-done" class="text-xs bg-emerald-100 px-2 py-0.5 rounded-full text-emerald-700 font-semibold">0</span>
+        </div>
+        <div id="col-done" class="space-y-3 flex-1 overflow-y-auto"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CREATE / EDIT MODAL -->
+  <div id="taskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div>
+          <h3 id="modal-title" class="text-base font-bold text-slate-900">Create / Delegate Task</h3>
+          <p class="text-xs text-slate-500">Every change will be logged in the permanent audit history</p>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <form id="task-form" onsubmit="saveTask(event)" class="space-y-3">
+        <input type="hidden" id="task-id" />
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Task Title</label>
+          <input type="text" id="task-title" required placeholder="e.g. Inspect Substation Switchyard Earthing" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Summary / Work Instructions</label>
+          <textarea id="task-summary" rows="2" placeholder="Key deliverables, steps, or constraints..." class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="bg-indigo-50/60 p-3 rounded-lg border border-indigo-100">
+          <label class="block text-xs font-bold text-indigo-900 mb-1">Assignee</label>
+          <select id="task-assignee" class="w-full text-sm border border-indigo-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"></select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Due Date</label>
+            <input type="date" id="task-duedate" required class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Priority</label>
+            <select id="task-priority" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="Low">Low</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Status (Lifecycle)</label>
+            <select id="task-status" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="todo">To Do</option>
+              <option value="inprogress">In Progress (Starts clock)</option>
+              <option value="done">Done (Completes clock)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Share / Collaborator</label>
+            <select id="task-sharedwith" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="">None (Private)</option>
+              <option value="alex@internal.net">Alex Carter</option>
+              <option value="priya@internal.net">Priya Patel</option>
+              <option value="marcus@internal.net">Marcus Vance</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 pt-3 border-t">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition">Cancel</button>
+          <button type="submit" class="px-4 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">Save & Log</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AUDIT TRAIL & LIFECYCLE HISTORY MODAL -->
+  <div id="historyModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-base font-bold text-slate-900">Task Lifecycle History</h3>
+            <span id="history-task-id" class="text-[11px] font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600"></span>
+          </div>
+          <p id="history-task-title" class="text-xs text-slate-600 font-medium mt-0.5 truncate max-w-md"></p>
+        </div>
+        <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <!-- Lifecycle Summary Stats -->
+      <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200 text-center">
+        <div>
+          <p class="text-[10px] uppercase font-bold text-slate-400">Created</p>
+          <p id="meta-created" class="text-xs font-semibold text-slate-700 mt-0.5">-</p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-amber-500">Started</p>
+          <p id="meta-started" class="text-xs font-semibold text-slate-700 mt-0.5">-</p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase font-bold text-emerald-500">Completed</p>
+          <p id="meta-completed" class="text-xs font-semibold text-slate-700 mt-0.5">-</p>
+        </div>
+      </div>
+
+      <!-- Chronological Audit Log Timeline -->
+      <div class="space-y-1">
+        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Audit Log Timeline</h4>
+        <div id="timeline-container" class="max-h-60 overflow-y-auto space-y-4 pl-2 pr-1"></div>
+      </div>
+
+      <div class="flex justify-end pt-3 border-t">
+        <button type="button" onclick="closeHistoryModal()" class="px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    const users = {
+      "alex@internal.net": { name: "Alex Carter", designation: "Reporting Officer (RO)", avatar: "AC", manager: null },
+      "priya@internal.net": { name: "Priya Patel", designation: "Junior Engineer", avatar: "PP", manager: "alex@internal.net" },
+      "marcus@internal.net": { name: "Marcus Vance", designation: "Junior Ops Officer", avatar: "MV", manager: "alex@internal.net" }
+    };
+
+    let currentUser = "alex@internal.net";
+    let activeFilter = "all";
+
+    // Format ISO string to readable string
+    function formatTimestamp(isoStr) {
+      if (!isoStr) return "-";
+      const d = new Date(isoStr);
+      return d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Calculate Turnaround Time (TAT)
+    function computeDuration(startIso, endIso) {
+      if (!startIso) return null;
+      const start = new Date(startIso);
+      const end = endIso ? new Date(endIso) : new Date();
+      const diffMs = Math.max(0, end - start);
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const days = Math.floor(hours / 24);
+      const remHours = hours % 24;
+
+      if (days > 0) return `${days}d ${remHours}h`;
+      if (hours > 0) return `${hours} hrs`;
+      const mins = Math.floor(diffMs / (1000 * 60));
+      return `${mins} mins`;
+    }
+
+    // Tasks Seed Data with Audit History
+    let tasks = [
+      {
+        id: "TSK-101",
+        title: "Hydro Turbine Shaft Alignment Check",
+        summary: "Execute dial gauge runout testing on Unit-2 turbine shaft before hydro-mechanical dry run.",
+        creator: "alex@internal.net",
+        assignee: "priya@internal.net",
+        sharedWith: "marcus@internal.net",
+        dueDate: "2026-09-20",
+        priority: "High",
+        status: "inprogress",
+        createdAt: "2026-09-12T09:30:00Z",
+        startedAt: "2026-09-13T10:15:00Z",
+        completedAt: null,
+        history: [
+          {
+            timestamp: "2026-09-12T09:30:00Z",
+            author: "alex@internal.net",
+            action: "Task created and delegated to Priya Patel by RO"
+          },
+          {
+            timestamp: "2026-09-13T10:15:00Z",
+            author: "priya@internal.net",
+            action: "Status moved to In Progress (Work execution commenced)"
+          }
+        ]
+      },
+      {
+        id: "TSK-102",
+        title: "Daily Switchyard Safety Logbook Entry",
+        summary: "Compile all safety clearance permits, PTW handovers, and earth switch positions.",
+        creator: "priya@internal.net",
+        assignee: "priya@internal.net",
+        sharedWith: "",
+        dueDate: "2026-09-14",
+        priority: "Medium",
+        status: "done",
+        createdAt: "2026-09-14T08:00:00Z",
+        startedAt: "2026-09-14T08:30:00Z",
+        completedAt: "2026-09-14T17:45:00Z",
+        history: [
+          {
+            timestamp: "2026-09-14T08:00:00Z",
+            author: "priya@internal.net",
+            action: "Task created by Junior Engineer"
+          },
+          {
+            timestamp: "2026-09-14T08:30:00Z",
+            author: "priya@internal.net",
+            action: "Status changed to In Progress"
+          },
+          {
+            timestamp: "2026-09-14T17:45:00Z",
+            author: "priya@internal.net",
+            action: "Task completed and signed off"
+          }
+        ]
+      },
+      {
+        id: "TSK-103",
+        title: "Transformer SF6 Gas & Pressure Test",
+        summary: "Weekly inspection of transformer bushing oil indicators and SF6 pressure.",
+        creator: "alex@internal.net",
+        assignee: "marcus@internal.net",
+        sharedWith: "",
+        dueDate: "2026-09-22",
+        priority: "Medium",
+        status: "todo",
+        createdAt: "2026-09-15T07:15:00Z",
+        startedAt: null,
+        completedAt: null,
+        history: [
+          {
+            timestamp: "2026-09-15T07:15:00Z",
+            author: "alex@internal.net",
+            action: "Task created and delegated to Marcus Vance"
+          }
+        ]
+      }
+    ];
+
+    function getReportees(officerEmail) {
+      return Object.keys(users).filter(email => users[email].manager === officerEmail);
+    }
+
+    function switchUser(email) {
+      currentUser = email;
+      const user = users[email];
+      document.getElementById("current-user-name").innerText = user.name;
+      document.getElementById("current-user-designation").innerText = user.designation;
+      document.getElementById("user-avatar").innerText = user.avatar;
+
+      const reportees = getReportees(currentUser);
+      const teamTab = document.getElementById("tab-team");
+      const roFilterContainer = document.getElementById("ro-filter-container");
+
+      if (reportees.length > 0) {
+        teamTab.classList.remove("hidden");
+        const juniorSelect = document.getElementById("junior-filter-select");
+        juniorSelect.innerHTML = `<option value="all">All Direct Reportees (${reportees.length})</option>`;
+        reportees.forEach(rEmail => {
+          juniorSelect.innerHTML += `<option value="${rEmail}">${users[rEmail].name}</option>`;
+        });
+      } else {
+        teamTab.classList.add("hidden");
+        roFilterContainer.classList.add("hidden");
+        if (activeFilter === "team-hierarchy") activeFilter = "all";
+      }
+
+      updateTabStyles();
+      renderBoard();
+    }
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      const roFilterContainer = document.getElementById("ro-filter-container");
+      if (filter === "team-hierarchy") {
+        roFilterContainer.classList.remove("hidden");
+      } else {
+        roFilterContainer.classList.add("hidden");
+      }
+      updateTabStyles();
+      renderBoard();
+    }
+
+    function updateTabStyles() {
+      const tabs = ["all", "assigned-by-ro", "shared", "team-hierarchy"];
+      tabs.forEach(t => {
+        const btn = document.getElementById("tab-" + (t === "team-hierarchy" ? "team" : t));
+        if (!btn) return;
+        if (activeFilter === t) {
+          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-xs transition flex items-center gap-1.5";
+        } else {
+          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition flex items-center gap-1.5";
+        }
+      });
+    }
+
+    function renderBoard() {
+      const colTodo = document.getElementById("col-todo");
+      const colInProgress = document.getElementById("col-inprogress");
+      const colDone = document.getElementById("col-done");
+
+      colTodo.innerHTML = "";
+      colInProgress.innerHTML = "";
+      colDone.innerHTML = "";
+
+      const user = users[currentUser];
+      const reportees = getReportees(currentUser);
+      const selectedJunior = document.getElementById("junior-filter-select")?.value || "all";
+
+      let countTotal = 0, countProgress = 0, countDone = 0, countDelegated = 0;
+
+      const visibleTasks = tasks.filter(t => {
+        if (activeFilter === "all") return t.assignee === currentUser;
+        if (activeFilter === "assigned-by-ro") return t.assignee === currentUser && t.creator === user.manager;
+        if (activeFilter === "shared") return t.sharedWith === currentUser && t.assignee !== currentUser;
+        if (activeFilter === "team-hierarchy") {
+          if (!reportees.includes(t.assignee)) return false;
+          if (selectedJunior !== "all") return t.assignee === selectedJunior;
+          return true;
+        }
+        return false;
+      });
+
+      visibleTasks.forEach(task => {
+        countTotal++;
+        if (task.status === "inprogress") countProgress++;
+        if (task.status === "done") countDone++;
+        if (task.creator === currentUser && task.assignee !== currentUser) countDelegated++;
+
+        const card = createCard(task);
+        if (task.status === "todo") colTodo.appendChild(card);
+        else if (task.status === "inprogress") colInProgress.appendChild(card);
+        else if (task.status === "done") colDone.appendChild(card);
+      });
+
+      document.getElementById("kpi-total").innerText = countTotal;
+      document.getElementById("kpi-progress").innerText = countProgress;
+      document.getElementById("kpi-done").innerText = countDone;
+      document.getElementById("kpi-delegated").innerText = countDelegated;
+
+      document.getElementById("badge-todo").innerText = colTodo.children.length;
+      document.getElementById("badge-inprogress").innerText = colInProgress.children.length;
+      document.getElementById("badge-done").innerText = colDone.children.length;
+    }
+
+    function createCard(task) {
+      const card = document.createElement("div");
+      card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition space-y-2.5";
+
+      const priorityColors = {
+        High: "bg-rose-50 text-rose-700 border-rose-200",
+        Medium: "bg-amber-50 text-amber-700 border-amber-200",
+        Low: "bg-slate-50 text-slate-700 border-slate-200"
+      };
+
+      const isDelegatedByRO = task.creator === users[task.assignee]?.manager;
+      const isSelfInitiated = task.creator === task.assignee;
+      const assigneeName = users[task.assignee]?.name || task.assignee;
+      const creatorName = users[task.creator]?.name || task.creator;
+
+      let delegationBadge = "";
+      if (isDelegatedByRO && task.creator === currentUser) {
+        delegationBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded"><i class="fa-solid fa-arrow-down-long text-[10px]"></i> Delegated by You to ${assigneeName.split(' ')[0]}</span>`;
+      } else if (isDelegatedByRO && task.creator !== currentUser) {
+        delegationBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded"><i class="fa-solid fa-shield-halved text-[10px]"></i> Assigned by RO (${creatorName.split(' ')[0]})</span>`;
+      } else if (isSelfInitiated && activeFilter === "team-hierarchy") {
+        delegationBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded"><i class="fa-regular fa-circle-dot text-[10px]"></i> Junior Self-Initiated</span>`;
+      }
+
+      // Compute status timeline pill
+      let durationPill = "";
+      if (task.status === "inprogress" && task.startedAt) {
+        const dur = computeDuration(task.startedAt, null);
+        durationPill = `<span class="text-[10px] font-medium text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 flex items-center gap-1"><i class="fa-regular fa-hourglass-half text-[9px]"></i> Running: ${dur}</span>`;
+      } else if (task.status === "done" && task.startedAt && task.completedAt) {
+        const dur = computeDuration(task.startedAt, task.completedAt);
+        durationPill = `<span class="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 flex items-center gap-1"><i class="fa-solid fa-check text-[9px]"></i> Took: ${dur}</span>`;
+      }
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${priorityColors[task.priority]}">
+              ${task.priority}
+            </span>
+            <span class="text-[10px] font-mono text-slate-400 font-semibold">${task.id}</span>
+          </div>
+          <div class="flex items-center space-x-2 text-slate-400 text-xs">
+            <button onclick="viewHistory('${task.id}')" title="View Full History / Timeline" class="hover:text-indigo-600 transition flex items-center gap-1 text-slate-500 font-medium">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              <span class="text-[10px]">${task.history ? task.history.length : 1}</span>
+            </button>
+            <button onclick="editTask('${task.id}')" title="Edit Task" class="hover:text-indigo-600"><i class="fa-regular fa-pen-to-square"></i></button>
+            <button onclick="deleteTask('${task.id}')" title="Delete Task" class="hover:text-rose-600"><i class="fa-regular fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-slate-900 text-sm leading-snug">${escapeHtml(task.title)}</h3>
+          <p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapeHtml(task.summary || 'No description provided.')}</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5">
+          ${delegationBadge}
+          ${durationPill}
+        </div>
+
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <div class="flex items-center space-x-1" title="Target Due Date">
+            <i class="fa-regular fa-calendar text-slate-400"></i>
+            <span>${task.dueDate}</span>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <span class="font-medium text-slate-700"><i class="fa-regular fa-circle-user text-indigo-500"></i> ${assigneeName.split(' ')[0]}</span>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    function openModal(editId = null) {
+      document.getElementById("taskModal").classList.remove("hidden");
+      const form = document.getElementById("task-form");
+      form.reset();
+
+      const assigneeSelect = document.getElementById("task-assignee");
+      assigneeSelect.innerHTML = `<option value="${currentUser}">Self (${users[currentUser].name})</option>`;
+      
+      const reportees = getReportees(currentUser);
+      if (reportees.length > 0) {
+        assigneeSelect.innerHTML += `<optgroup label="Direct Reportees (Assign as RO)">`;
+        reportees.forEach(rEmail => {
+          assigneeSelect.innerHTML += `<option value="${rEmail}">${users[rEmail].name} (${users[rEmail].designation})</option>`;
+        });
+        assigneeSelect.innerHTML += `</optgroup>`;
+      }
+
+      if (editId) {
+        const task = tasks.find(t => t.id === editId);
+        document.getElementById("modal-title").innerText = "Edit / Update Task";
+        document.getElementById("task-id").value = task.id;
+        document.getElementById("task-title").value = task.title;
+        document.getElementById("task-summary").value = task.summary;
+        document.getElementById("task-duedate").value = task.dueDate;
+        document.getElementById("task-priority").value = task.priority;
+        document.getElementById("task-status").value = task.status;
+        document.getElementById("task-assignee").value = task.assignee;
+        document.getElementById("task-sharedwith").value = task.sharedWith;
+      } else {
+        document.getElementById("modal-title").innerText = "Create / Delegate Task";
+        document.getElementById("task-id").value = "";
+        document.getElementById("task-duedate").value = new Date().toISOString().split('T')[0];
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("taskModal").classList.add("hidden");
+    }
+
+    function saveTask(e) {
+      e.preventDefault();
+      const id = document.getElementById("task-id").value;
+      const title = document.getElementById("task-title").value;
+      const summary = document.getElementById("task-summary").value;
+      const dueDate = document.getElementById("task-duedate").value;
+      const priority = document.getElementById("task-priority").value;
+      const newStatus = document.getElementById("task-status").value;
+      const assignee = document.getElementById("task-assignee").value;
+      const sharedWith = document.getElementById("task-sharedwith").value;
+      const nowIso = new Date().toISOString();
+
+      if (id) {
+        const task = tasks.find(t => t.id === id);
+        let changes = [];
+
+        // Track lifecycle transitions
+        if (task.status !== newStatus) {
+          changes.push(`Status changed from '${task.status.toUpperCase()}' to '${newStatus.toUpperCase()}'`);
+          if (newStatus === "inprogress" && !task.startedAt) {
+            task.startedAt = nowIso;
+            changes.push("Execution officially started (timer initiated)");
+          }
+          if (newStatus === "done" && !task.completedAt) {
+            task.completedAt = nowIso;
+            changes.push("Task marked complete (timer closed)");
+          }
+          if (newStatus === "todo") {
+            task.completedAt = null; // reset completion if reverted
+          }
+        }
+
+        if (task.assignee !== assignee) {
+          changes.push(`Reassigned from ${users[task.assignee]?.name || task.assignee} to ${users[assignee]?.name || assignee}`);
+        }
+        if (task.priority !== priority) {
+          changes.push(`Priority changed to ${priority}`);
+        }
+        if (task.dueDate !== dueDate) {
+          changes.push(`Due date updated to ${dueDate}`);
+        }
+
+        task.title = title;
+        task.summary = summary;
+        task.dueDate = dueDate;
+        task.priority = priority;
+        task.status = newStatus;
+        task.assignee = assignee;
+        task.sharedWith = sharedWith;
+
+        // Log entry if any property changed
+        if (changes.length > 0) {
+          task.history.unshift({
+            timestamp: nowIso,
+            author: currentUser,
+            action: changes.join("; ")
+          });
+        }
+      } else {
+        const newId = "TSK-" + (100 + tasks.length + 1);
+        const startedAt = (newStatus === "inprogress") ? nowIso : null;
+        const completedAt = (newStatus === "done") ? nowIso : null;
+
+        const isDelegated = assignee !== currentUser;
+        const initAction = isDelegated 
+          ? `Task created by RO (${users[currentUser].name}) and assigned to ${users[assignee]?.name}`
+          : `Task created by ${users[currentUser].name}`;
+
+        tasks.unshift({
+          id: newId,
+          title,
+          summary,
+          dueDate,
+          priority,
+          status: newStatus,
+          creator: currentUser,
+          assignee,
+          sharedWith,
+          createdAt: nowIso,
+          startedAt: startedAt,
+          completedAt: completedAt,
+          history: [
+            {
+              timestamp: nowIso,
+              author: currentUser,
+              action: initAction
+            }
+          ]
+        });
+      }
+
+      closeModal();
+      renderBoard();
+    }
+
+    // View Audit History Modal
+    function viewHistory(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      document.getElementById("history-task-id").innerText = task.id;
+      document.getElementById("history-task-title").innerText = task.title;
+      document.getElementById("meta-created").innerText = formatTimestamp(task.createdAt);
+      document.getElementById("meta-started").innerText = formatTimestamp(task.startedAt);
+      document.getElementById("meta-completed").innerText = formatTimestamp(task.completedAt);
+
+      const timeline = document.getElementById("timeline-container");
+      timeline.innerHTML = "";
+
+      if (!task.history || task.history.length === 0) {
+        timeline.innerHTML = `<p class="text-xs text-slate-400 italic">No history records found.</p>`;
+      } else {
+        task.history.forEach((h, index) => {
+          const authorUser = users[h.author];
+          const authorName = authorUser ? authorUser.name : h.author;
+          const isLatest = index === 0;
+
+          const logItem = document.createElement("div");
+          logItem.className = "relative pl-6 pb-4 border-l-2 " + (isLatest ? "border-indigo-500" : "border-slate-200");
+          logItem.innerHTML = `
+            <div class="absolute -left-[7px] top-0 w-3 h-3 rounded-full ${isLatest ? 'bg-indigo-600 ring-4 ring-indigo-100' : 'bg-slate-300'}"></div>
+            <div class="flex items-center justify-between text-[11px] text-slate-400">
+              <span class="font-semibold text-slate-700">${escapeHtml(authorName)}</span>
+              <span>${formatTimestamp(h.timestamp)}</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-200/80">
+              ${escapeHtml(h.action)}
+            </p>
+          `;
+          timeline.appendChild(logItem);
+        });
+      }
+
+      document.getElementById("historyModal").classList.remove("hidden");
+    }
+
+    function closeHistoryModal() {
+      document.getElementById("historyModal").classList.add("hidden");
+    }
+
+    function editTask(id) {
+      openModal(id);
+    }
+
+    function deleteTask(id) {
+      if (confirm("Are you sure you want to remove this task and its history?")) {
+        tasks = tasks.filter(t => t.id !== id);
+        renderBoard();
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[tag] || tag));
+    }
+
+    // Initialize application
+    switchUser(currentUser);
+  </script>
+</body>
+</html>
