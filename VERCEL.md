@@ -3,7 +3,12 @@
 `main` is the disposable public demo. `local_setup` retains the local installation.
 The demo never reads DATABASE_URL or tasks.db. It uses in-memory SQLite to keep
 existing task, reporting, PDF, and account workflows available without provisioning
-a database. Each process starts with 15 fictional employees and four categories.
+a database. Each process starts with 15 fictional employees, 73 fictional tasks,
+and four categories. Every employee has personal to-do, in-progress, and completed
+tasks. Each of the 14 reporting employees also has a manager assignment and a
+shared assignment. Examples include all priorities, overdue work, work due today
+and tomorrow, future deadlines, lifecycle history, and demo activity logs.
+Due dates are relative to the instance startup date in India time.
 Edits are temporary, can disappear between requests, and are not synchronized
 between Vercel instances. This is not persistent team storage.
 
@@ -28,6 +33,11 @@ Administrator: `avery@example.com`. Reporting officers: `jordan@example.com`,
 `riley@example.com`, and `casey@example.com`. The full fictional roster is in
 app/demo_data.py. Do not upload real employee data to this demonstration.
 AI features still need their separately configured provider credentials.
+
+Use Jordan's account to explore delegation and team hierarchy, Taylor's account
+for manager-assigned and shared work, and Avery's account for all-team reports
+and activity logs. Personal work is available for every account. Task Summary,
+PDF exports, and configured AI summaries use the same seeded tasks.
 
 ## Local verification
 
