@@ -8,6 +8,8 @@ TaskOrbit is a browser-based task manager for personal work, reporting-officer a
 
 This README describes the current `main` branch. It is a **disposable Vercel demonstration**, with 15 fictional employees and 73 fictional tasks. The `local_setup` branch is intended to retain the original local installation; older Windows, Docker, and PostgreSQL instructions should not be treated as the deployment procedure for this branch.
 
+Last updated: **October 4, 2026**.
+
 ## Contents
 
 - [Demo storage and important limits](#demo-storage-and-important-limits)
@@ -164,7 +166,7 @@ Try Jordan for delegation and team visibility, Taylor for assigned work and edit
 
 ### Board behavior
 
-The board groups tasks into To Do, In Progress, and Done. Pending cards are sorted by earliest due date (overdue first), then priority, then ID. Done cards show the most recent completion first; missing completion dates follow dated tasks. Each column has independent pagination, with nine tasks per column by default. The page-size selector applies to each column and resets all three to page one; changing views also resets the pages. Pagination happens in the browser after fetching the matching list. KPI counts cover the entire selected view, and column badges show all tasks in that status regardless of the current page.
+The board groups tasks into To Do, In Progress, and Done. Pending cards are sorted by earliest due date (overdue first), then priority, then ID. Done cards show the most recent completion first; missing completion dates follow dated tasks. Each column has independent pagination, with nine tasks per column by default. The page-size selector offers 6, 9, or 15 tasks per column. It applies to each column and resets all three to page one; changing views also resets the pages. Pagination happens in the browser after fetching the matching list. KPI counts cover the entire selected view, and column badges show all tasks in that status regardless of the current page.
 
 Cards show priorities, due-date labels, category, and history. Browser due-date labels use the browser's local date; server reports use India time, so these can differ near midnight for users in other timezones. There is no live push synchronization or background notification system.
 
@@ -215,7 +217,23 @@ Any signed-in employee can create a category. Names are 1–80 characters; white
 
 ## Reports and PDF export
 
-Task Summary has filters under every column heading: task title or ID (literal, case-insensitive text), assigned-by name (case-insensitive text), assigned-to employee, status, priority, inclusive due-date range, and overdue Yes/No. Filters combine with AND; text filters allow up to 200 characters. Clear filters restores the full authorized view. Invalid dates and reversed date ranges are rejected. Totals and PDF exports use the same filters. Status options are All, Pending, To Do, In Progress, and Done. Pending combines To Do and In Progress.
+Task Summary places a filter directly beneath each of its seven column headings:
+
+- **Task:** search a title or task ID, such as `report` or `#12`. Matching is literal, case-insensitive substring matching; `%` and `_` are not wildcards.
+- **Assigned by:** search the creator's name, case-insensitively. This is the task creator, who is not necessarily the employee's current manager.
+- **Assigned to:** select an employee from the authorized report's employee list.
+- **Status:** All, Pending, To Do, In Progress, or Done. Pending combines To Do and In Progress.
+- **Priority:** All, Low, Medium, or High.
+- **Due date:** choose an optional From date, To date, or both. Both boundaries are inclusive.
+- **Overdue:** All, Yes, or No. No includes completed tasks and pending tasks not yet overdue.
+
+All active filters combine with **AND**. Text inputs allow up to 200 characters and refresh after a 300 ms typing pause. Selection and date changes refresh immediately. These controls filter on the server; the response totals and downloaded PDF use the same parameters.
+
+Use **Clear filters** to reset all seven columns to the full authorized report. Employee choices remain available when other filters yield no rows. Empty results display “No tasks match these filters” with zero totals. Invalid dates, reversed date ranges, invalid overdue values, and overlong text are rejected.
+
+For example, select an employee, choose Pending and High, and set Overdue to Yes to see that employee's high-priority overdue work. Add an Assigned by name to narrow it to a particular creator. Download PDF exports that same selection and includes the active filters in its heading.
+
+Summary filters are separate from board tabs and AI Console filters. They are held in the current browser page, not saved as reusable report presets.
 
 Administrators can report on all tasks. Other users can report on tasks assigned to themselves or descendants, plus tasks they created. This is deliberately broader than My Desk's creator/assignee scope. A filter never expands authorization.
 
@@ -356,9 +374,9 @@ Install development dependencies and run the checks from the repository root:
 node tests/frontend-regressions.cjs
 ```
 
-The latest verification before this README included 26 passing Python tests and a successful live Groq summary with fictional tasks. Frontend regression checks also passed earlier in this work. Unit tests mock provider responses; they do not require a live key or prove every Vercel deployment succeeds.
+Latest application verification on October 4, 2026: **27 Python tests passed**, and the frontend regression checks passed. A separate live Groq check successfully summarized the fictional workload with 30 task details and totals for all 73 tasks. Unit tests mock provider responses; they do not require a live key or prove every Vercel deployment succeeds.
 
-Coverage includes task visibility/modification, hierarchy updates, import validation, authentication-related behavior, report/PDF scope, AI context boundaries and provider failures, demo seeding idempotency, login for all 15 accounts, and a fresh Vercel-style process. Test databases are in-memory and do not connect to a configured external database.
+Coverage includes task visibility/modification, hierarchy updates, import validation, authentication-related behavior, combined summary-column filters, matching PDF results, invalid date ranges, literal text searches, report/PDF scope, AI context boundaries and provider failures, demo seeding idempotency, login for all 15 accounts, and a fresh Vercel-style process. Frontend checks cover independent column pagination, deadline/completion ordering, total badges, page clamping after data changes, empty columns, safe rendering, and logout. Test databases are in-memory and do not connect to a configured external database.
 
 Key files:
 
