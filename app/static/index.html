@@ -699,7 +699,7 @@
         await requireSuccess(response);
         const config = await response.json();
         const ready = config.configured && config.free_tier_confirmed;
-        message.textContent = ready ? `Ready: ${config.model}` : 'Setup needed: an administrator must run scripts/configure-groq.ps1 on the server, then restart the app. Use a Groq Free Plan account.';
+        message.textContent = ready ? `Ready: ${config.model}` : config.setup_message || 'AI setup is incomplete. Ask your administrator to configure the Groq environment variables and redeploy or restart the app.';
         document.getElementById('ai-ask').disabled = !ready || aiBusy;
         document.getElementById('ai-summarize').disabled = !ready || aiBusy;
         const select = document.getElementById('ai-employee');

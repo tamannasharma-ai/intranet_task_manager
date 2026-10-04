@@ -2,6 +2,17 @@
 
 The **AI Console** tab supports task questions and **Generate Summary**, using `qwen/qwen3.8-27b` on Groq. Each request reads a fresh, authorized task snapshot. Employee and status filters narrow the scope. Answers include task IDs and an expandable list of the task context supplied to the model. Each question is independent; prior conversation is not sent back to the model.
 
+## Setup on Vercel
+
+In your Vercel project, open **Settings > Environment Variables**:
+
+1. Set `GROQ_API_KEY` to your Groq API key.
+2. After confirming your account uses the Free Plan, set `GROQ_FREE_TIER_CONFIRMED` to `true`.
+3. Enable both variables for Production and Preview, save, and redeploy.
+
+The Windows configuration script is only for local installations. If the key is
+already configured, the AI Console will identify the remaining confirmation setting.
+
 ## Setup on this Windows server
 
 1. Obtain an API key from https://console.groq.com/keys using a **Free Plan** account. Verify your account's model access and rate limits. Do not upgrade billing if you require free-only operation.

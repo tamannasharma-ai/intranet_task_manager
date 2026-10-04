@@ -23,18 +23,30 @@ class AIQuestion(BaseModel):
 
 
 def configuration():
-    return {"model": MODEL, "configured": bool(os.getenv("GROQ_API_KEY", "").strip()),
-            "free_tier_confirmed": os.getenv("GROQ_FREE_TIER_CONFIRMED") == "true"}
+    configured = bool(os.getenv("GROQ_API_KEY", "").strip())
+    confirmed = os.getenv("GROQ_FREE_TIER_CONFIRMED", "").strip().lower() == "true"
+    missing = []
+    if not configured:
+        missing.append("GROQ_API_KEY")
+    if not confirmed:
+        missing.append("GROQ_FREE_TIER_CONFIRMED=true (after confirming your Groq Free Plan)")
+    setup_message = ""
+    if missing:
+        setup_message = "Setup needed: set " + " and ".join(missing) + ". "
+        if os.getenv("VERCEL") == "1":
+            setup_message += "Open Vercel project Settings > Environment Variables, select Production and Preview, save, then redeploy."
+        else:
+            setup_message += "Run scripts/configure-groq.ps1 on the local Windows server, then restart the app."
+    return {"model": MODEL, "configured": configured,
+            "free_tier_confirmed": confirmed, "setup_message": setup_message}
 
 
 def answer_question(db, user, reportee_ids, payload):
     from app.task_reports import task_summary
     from app.models import Task
     config = configuration()
-    if not config["configured"]:
-        raise HTTPException(503, "AI is not configured. Ask your administrator to run scripts/configure-groq.ps1 on the server.")
-    if not config["free_tier_confirmed"]:
-        raise HTTPException(503, "Administrator must confirm a free-plan Groq account before enabling AI.")
+    if not config["configured"] or not config["free_tier_confirmed"]:
+        raise HTTPException(503, config["setup_message"])
     with _lock:
         now = time.monotonic()
         recent = [stamp for stamp in _requests[user.id] if now - stamp < 60]
