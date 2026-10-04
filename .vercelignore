@@ -15,4 +15,5 @@ temp
 tests
 deploy
 scripts
-index.html
+# Exclude only the old root page, not app/static/index.html.
+/index.html
