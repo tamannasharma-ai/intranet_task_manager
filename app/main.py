@@ -5,6 +5,7 @@ import os
 import threading
 import time
 import uuid
+from pathlib import Path
 
 from email_validator import EmailNotValidError, validate_email
 from fastapi import FastAPI, Depends, File, Form, HTTPException, Request, Response, UploadFile, status
@@ -16,7 +17,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import inspect, text, or_
 from typing import List
 
-from app.database import Base, engine, get_db
+from app.database import Base, engine, get_db, SessionLocal
 from app.models import User, Task, TaskCategory, ActivityLog
 from app.schemas import ActivityLogOut, CategoryCreate, CategoryOut, UserOut, TaskOut, TaskCreate, TaskUpdate, Token, PasswordChangeRequest, ManagerUpdate
 from app.auth import get_password_hash, verify_password, create_access_token, get_current_user, get_user_from_token
@@ -27,7 +28,7 @@ from app.ai_console import AIQuestion
 VALID_TASK_FILTERS = {"all", "personal", "assigned-by-ro", "shared", "team-hierarchy", "delegated-by-me"}
 ALLOWED_EMAIL_DOMAIN = "thdc.co.in"
 APP_ENV = os.getenv("APP_ENV", "development").lower()
-IS_PRODUCTION = APP_ENV == "production"
+IS_PRODUCTION = APP_ENV == "production" or os.getenv("VERCEL") == "1"
 SECURE_COOKIES = IS_PRODUCTION or os.getenv("SECURE_COOKIES", "").lower() == "true"
 if IS_PRODUCTION and not os.getenv("SECRET_KEY"):
     raise RuntimeError("SECRET_KEY is required when APP_ENV=production")
@@ -49,7 +50,8 @@ def migrate_sqlite_schema() -> None:
 migrate_sqlite_schema()
 
 app = FastAPI(title="Continuum")
-app.mount("/vendor", StaticFiles(directory="app/static/vendor"), name="vendor")
+STATIC_DIR = Path(__file__).resolve().parent / "static"
+app.mount("/vendor", StaticFiles(directory=str(STATIC_DIR / "vendor")), name="vendor")
 
 @app.get("/api/health")
 def health(db: Session = Depends(get_db)):
@@ -136,8 +138,6 @@ allowed_origins = [
     ).split(",")
     if origin.strip()
 ]
-if IS_PRODUCTION and not os.getenv("ALLOWED_ORIGINS"):
-    raise RuntimeError("ALLOWED_ORIGINS is required when APP_ENV=production")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
@@ -146,48 +146,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Seed sample users if DB is fresh
-@app.on_event("startup")
-def seed_database():
-    db = next(get_db())
-    try:
-        if not IS_PRODUCTION and not db.query(User).first():
-            hashed = get_password_hash("password123")
-            ro = User(name="Alex Carter", email="alex@thdc.co.in", hashed_password=hashed, role="Reporting Officer", manager_id=None)
-            db.add(ro)
-            db.commit()
-            db.refresh(ro)
-
-            u1 = User(name="Priya Patel", email="priya@thdc.co.in", hashed_password=hashed, role="Junior Engineer", manager_id=ro.id)
-            u2 = User(name="Marcus Vance", email="marcus@thdc.co.in", hashed_password=hashed, role="Junior Ops Officer", manager_id=ro.id)
-            db.add_all([u1, u2])
-            db.commit()
-
-        bootstrap_email = os.getenv("BOOTSTRAP_ADMIN_EMAIL", "").strip().lower()
-        bootstrap_password = os.getenv("BOOTSTRAP_ADMIN_PASSWORD", "")
-        if bootstrap_password and len(bootstrap_password) < 12:
-            raise RuntimeError("BOOTSTRAP_ADMIN_PASSWORD must be at least 12 characters")
-        admin = db.query(User).filter(User.role == "Admin").first()
-        if not admin and bootstrap_email and bootstrap_password:
-            db.add(
-                User(
-                    name="System Administrator",
-                    email=bootstrap_email,
-                    hashed_password=get_password_hash(bootstrap_password),
-                    role="Admin",
-                    manager_id=None,
-                )
-            )
-            db.commit()
-
-        default_categories = ["Send email", "Take approval", "Prepare report", "Review document"]
-        existing = {name for (name,) in db.query(TaskCategory.name).all()}
-        for name in default_categories:
-            if name not in existing:
-                db.add(TaskCategory(name=name))
-        db.commit()
-    finally:
-        db.close()
+# Initialize per process, including runtimes without ASGI lifespan events.
+from app.demo_data import seed_demo
+with SessionLocal() as demo_db:
+    seed_demo(demo_db)
 
 def get_direct_reportee_ids(db: Session, user: User) -> list[int]:
     return [id_ for (id_,) in db.query(User.id).filter(User.manager_id == user.id).all()]
@@ -361,8 +323,6 @@ def change_password(
 @app.get("/api/auth/users", response_model=List[UserOut])
 def get_login_users(db: Session = Depends(get_db)):
     """Return safe account details used to select an account on the login page."""
-    if IS_PRODUCTION:
-        raise HTTPException(status_code=404, detail="Account directory is disabled")
     return db.query(User).order_by(User.name.asc()).all()
 
 @app.get("/api/users", response_model=List[UserOut])
@@ -582,53 +542,29 @@ def list_activity_logs(
     return db.query(ActivityLog).order_by(ActivityLog.created_at.desc()).limit(limit).all()
 
 @app.get("/")
-def redirect_to_login(request: Request):
+def redirect_to_login(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("task_manager_token")
     if token:
-        db = next(get_db())
         try:
             get_user_from_token(token, db)
             return RedirectResponse(url="/dashboard", status_code=status.HTTP_303_SEE_OTHER)
         except HTTPException:
-            return RedirectResponse(url="/login.html", status_code=status.HTTP_303_SEE_OTHER)
-        finally:
-            db.close()
+            pass
     return RedirectResponse(url="/login.html", status_code=status.HTTP_303_SEE_OTHER)
 
 @app.get("/login")
-def login_page():
-    return FileResponse("app/static/login.html")
-
 @app.get("/login.html")
-def login_page_html():
-    return FileResponse("app/static/login.html")
+def login_page():
+    return FileResponse(STATIC_DIR / "login.html")
 
 @app.get("/dashboard")
-def dashboard_page(request: Request):
-    token = request.cookies.get("task_manager_token")
-    if not token:
-        return RedirectResponse(url="/login.html", status_code=status.HTTP_303_SEE_OTHER)
-    db = next(get_db())
-    try:
-        get_user_from_token(token, db)
-    except HTTPException:
-        return RedirectResponse(url="/login.html", status_code=status.HTTP_303_SEE_OTHER)
-    else:
-        return FileResponse("app/static/index.html")
-    finally:
-        db.close()
-
 @app.get("/dashboard.html")
-def dashboard_page_html(request: Request):
+def dashboard_page(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("task_manager_token")
-    if not token:
-        return RedirectResponse(url="/login.html", status_code=status.HTTP_303_SEE_OTHER)
-    db = next(get_db())
-    try:
-        get_user_from_token(token, db)
-    except HTTPException:
-        return RedirectResponse(url="/login.html", status_code=status.HTTP_303_SEE_OTHER)
-    else:
-        return FileResponse("app/static/index.html")
-    finally:
-        db.close()
+    if token:
+        try:
+            get_user_from_token(token, db)
+            return FileResponse(STATIC_DIR / "index.html")
+        except HTTPException:
+            pass
+    return RedirectResponse(url="/login.html", status_code=status.HTTP_303_SEE_OTHER)

@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.db
+*.db-*
+*.sqlite*
+.env
+.env.*
+!.env.example
+.vercel/
+logs/
+tmp/
+temp/
+.runtime/
+Book1.csv

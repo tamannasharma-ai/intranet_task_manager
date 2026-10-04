@@ -36,7 +36,7 @@ def configure_logging() -> logging.Logger:
     logger.addHandler(console_handler)
 
     default_log_file = Path(__file__).resolve().parent.parent / "logs" / "continuum.log"
-    log_file = os.getenv("LOG_FILE", str(default_log_file)).strip()
+    log_file = os.getenv("LOG_FILE", "" if os.getenv("VERCEL") == "1" else str(default_log_file)).strip()
     if log_file:
         try:
             Path(log_file).parent.mkdir(parents=True, exist_ok=True)
