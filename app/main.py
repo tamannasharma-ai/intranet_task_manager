@@ -467,7 +467,6 @@ def list_tasks(filter_type: str = "all", db: Session = Depends(get_db), current_
     if filter_type == "all":
         query = db.query(Task).filter(
             or_(Task.assignee_id == current_user.id, Task.creator_id == current_user.id),
-            Task.status.in_(["todo", "inprogress"]),
         )
     elif filter_type == "personal":
         query = db.query(Task).filter(

@@ -28,6 +28,67 @@ const card = vm.runInContext('createCard(task)', context);
 assert.ok(!card.innerHTML.includes('<img'));
 assert.ok(card.innerHTML.includes('&lt;img'));
 
+// Exercise the actual board rendering and controls with more than one page
+// in every column, including page clamping after completion/deletion.
+const elements = new Map();
+const board = {
+  currentUser: {id: 1}, pageSize: 2,
+  columnPages: {todo: 1, inprogress: 1, done: 1},
+  currentTasks: [],
+  createCard: task => ({taskId: task.id}),
+  document: {
+    createElement: () => ({}),
+    getElementById: id => {
+      if (!elements.has(id)) elements.set(id, {
+        children: [], replaceChildren() { this.children = []; },
+        appendChild(child) { this.children.push(child); }
+      });
+      return elements.get(id);
+    }
+  }
+};
+vm.createContext(board);
+for (const name of ['compareTaskOrder', 'getColumnTasks', 'updatePagination', 'changePage', 'changePageSize', 'renderBoard']) {
+  const start = code.indexOf('    function ' + name + '(');
+  const end = code.indexOf('\n    }', start) + 6;
+  vm.runInContext(code.slice(start, end), board);
+}
+board.currentTasks = [
+  {id:1,status:'todo',due_date:'2026-10-01',priority:'Low'},
+  {id:2,status:'todo',due_date:'2026-10-05',priority:'High'},
+  {id:3,status:'todo',due_date:'2026-10-01',priority:'High'},
+  {id:4,status:'inprogress',due_date:'2026-10-01',priority:'High'},
+  {id:5,status:'inprogress',due_date:'2026-10-02',priority:'High'},
+  {id:6,status:'inprogress',due_date:'2026-10-03',priority:'High'},
+  {id:7,status:'done',completed_at:'2026-10-01T12:00:00',priority:'High'},
+  {id:8,status:'done',completed_at:'2026-10-03T12:00:00',priority:'Low'},
+  {id:9,status:'done',completed_at:null,priority:'High'}
+];
+board.renderBoard();
+assert.deepEqual(elements.get('col-todo').children.map(c=>c.taskId), [3,1]);
+assert.deepEqual(elements.get('col-done').children.map(c=>c.taskId), [8,7]);
+assert.equal(elements.get('badge-done').textContent, 3);
+assert.equal(elements.get('badge-todo').textContent, 3);
+board.changePage('todo', 1);
+assert.deepEqual(elements.get('col-todo').children.map(c=>c.taskId), [2]);
+assert.deepEqual(elements.get('col-done').children.map(c=>c.taskId), [8,7]);
+assert.equal(elements.get('badge-todo').textContent, 3);
+assert.equal(elements.get('next-page-todo').disabled, true);
+board.currentTasks = board.currentTasks.filter(task=>task.id!==2);
+board.renderBoard();
+assert.equal(board.columnPages.todo, 1);
+board.changePage('done', 1);
+assert.deepEqual(elements.get('col-done').children.map(c=>c.taskId), [9]);
+board.changePageSize('6');
+assert.equal(board.columnPages.done, 1);
+board.currentTasks = [];
+board.renderBoard();
+assert.equal(elements.get('badge-done').textContent, 0);
+assert.equal(elements.get('previous-page-done').disabled, true);
+assert.equal(elements.get('next-page-done').disabled, true);
+assert.equal(elements.get('col-done').children[0].textContent, 'No tasks in this column.');
+console.log('PASS: independent column pages, due-date/completion sorting, totals, page clamping, empty states');
+
 (async () => {
   const events = [];
   context.authToken = 'test-token';

@@ -75,7 +75,7 @@ class TaskRegressions(unittest.TestCase):
         })
         self.assertEqual(result.status_code, 403)
 
-    def test_desk_pending_and_personal_scope_for_all_roles(self):
+    def test_desk_all_statuses_and_personal_scope_for_all_roles(self):
         with self.sessions() as db:
             samples = [
                 ("personal pending", self.manager, self.manager, "todo"),
@@ -99,7 +99,8 @@ class TaskRegressions(unittest.TestCase):
             desk = self.client.get("/api/tasks?filter_type=all", headers=self.headers(self.manager))
             self.assertEqual(desk.status_code, 200)
             self.assertEqual({t["title"] for t in desk.json()}, {
-                "personal pending", "assigned pending", "delegated pending", "delegated started"})
+                "personal pending", "personal finished", "assigned pending", "assigned finished",
+                "delegated pending", "delegated started", "delegated finished"})
             personal = self.client.get("/api/tasks?filter_type=personal", headers=self.headers(self.manager))
             self.assertEqual(personal.status_code, 200)
             self.assertEqual({t["title"] for t in personal.json()}, {"personal pending", "personal finished"})
