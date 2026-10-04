@@ -153,13 +153,14 @@
 
     <section id="task-summary-panel" class="hidden bg-white rounded-xl border border-slate-200 p-4 space-y-4">
       <div class="flex flex-wrap items-end gap-3">
-        <label class="text-xs font-semibold">Assigned to<select id="summary-employee" onchange="fetchTasks().catch(error => alert(error.message))" class="block border rounded-lg p-2 mt-1"><option value="">All visible employees</option></select></label>
-        <label class="text-xs font-semibold">Status<select id="summary-status" onchange="fetchTasks().catch(error => alert(error.message))" class="block border rounded-lg p-2 mt-1"><option value="all">All statuses</option><option value="pending">Pending</option><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></label>
-        <label class="text-xs font-semibold">Priority<select id="summary-priority" onchange="fetchTasks().catch(error => alert(error.message))" class="block border rounded-lg p-2 mt-1"><option value="all">All priorities</option><option>Low</option><option>Medium</option><option>High</option></select></label>
+
+
+
+        <button onclick="clearSummaryFilters()" class="border border-slate-300 rounded-lg px-4 py-2 text-sm">Clear filters</button>
         <button id="download-summary" onclick="downloadSummaryPdf()" class="bg-indigo-600 text-white rounded-lg px-4 py-2 text-sm">Download PDF</button>
       </div>
       <p id="summary-totals" role="status" class="text-sm text-slate-600"></p>
-      <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100"><tr><th class="p-2">Task</th><th class="p-2">Assigned by</th><th class="p-2">Assigned to</th><th class="p-2">Status</th><th class="p-2">Priority</th><th class="p-2">Due date</th><th class="p-2">Overdue</th></tr></thead><tbody id="summary-rows"></tbody></table></div>
+      <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100"><tr><th class="p-2">Task</th><th class="p-2">Assigned by</th><th class="p-2">Assigned to</th><th class="p-2">Status</th><th class="p-2">Priority</th><th class="p-2">Due date</th><th class="p-2">Overdue</th></tr><tr><th class="p-2 align-top"><input id="summary-task" aria-label="Filter task title or ID" type="search" maxlength="200" placeholder="Title or #ID" oninput="scheduleSummary()" class="w-full min-w-[130px] border rounded-lg p-2 font-normal" /></th><th class="p-2 align-top"><input id="summary-creator" aria-label="Filter assigned by" type="search" maxlength="200" placeholder="Name" oninput="scheduleSummary()" class="w-full min-w-[130px] border rounded-lg p-2 font-normal" /></th><th class="p-2 align-top"><label class="text-xs font-semibold">Assigned to<select id="summary-employee" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="">All visible employees</option></select></label></th><th class="p-2 align-top"><label class="text-xs font-semibold">Status<select id="summary-status" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="all">All statuses</option><option value="pending">Pending</option><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></label></th><th class="p-2 align-top"><label class="text-xs font-semibold">Priority<select id="summary-priority" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="all">All priorities</option><option>Low</option><option>Medium</option><option>High</option></select></label></th><th class="p-2 align-top"><div class="space-y-1"><input id="summary-due-from" aria-label="Due date from" title="Due date from" type="date" onchange="refreshSummary()" class="border rounded p-1 font-normal" /><input id="summary-due-to" aria-label="Due date to" title="Due date to" type="date" onchange="refreshSummary()" class="border rounded p-1 font-normal" /></div></th><th class="p-2 align-top"><select id="summary-overdue" aria-label="Filter overdue" onchange="refreshSummary()" class="border rounded-lg p-2 font-normal"><option value="all">All</option><option value="yes">Yes</option><option value="no">No</option></select></th></tr></thead><tbody id="summary-rows"></tbody></table></div>
     </section>
 
     <!-- KANBAN BOARD -->
@@ -795,10 +796,38 @@
     }
 
     let summaryRequestId = 0;
+    let summaryFilterTimer;
+    function refreshSummary() {
+      clearTimeout(summaryFilterTimer);
+      fetchSummary().catch(error => {
+        document.getElementById('summary-totals').textContent = error.message;
+      });
+    }
+
+    function scheduleSummary() {
+      clearTimeout(summaryFilterTimer);
+      ++summaryRequestId;
+      summaryFilterTimer = setTimeout(refreshSummary, 300);
+    }
+
+    function clearSummaryFilters() {
+      for (const id of ['employee', 'task', 'creator', 'due-from', 'due-to']) {
+        document.getElementById('summary-' + id).value = '';
+      }
+      for (const id of ['status', 'priority', 'overdue']) {
+        document.getElementById('summary-' + id).value = 'all';
+      }
+      refreshSummary();
+    }
+
     function summaryParams() {
       const params = new URLSearchParams({status: document.getElementById('summary-status').value, priority: document.getElementById('summary-priority').value});
       const employee = document.getElementById('summary-employee').value;
       if (employee) params.set('assignee_id', employee);
+      for (const [id, key] of [['task', 'task_text'], ['creator', 'creator_text'], ['due-from', 'due_from'], ['due-to', 'due_to'], ['overdue', 'overdue']]) {
+        const value = document.getElementById('summary-' + id).value;
+        if (value) params.set(key, value);
+      }
       return params;
     }
 

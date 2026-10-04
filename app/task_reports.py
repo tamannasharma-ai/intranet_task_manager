@@ -1,5 +1,5 @@
 """Permission-scoped summary data and downloadable PDF reports."""
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from io import BytesIO
 from xml.sax.saxutils import escape
 
@@ -13,11 +13,23 @@ STATUS_LABELS = {"todo": "To Do", "inprogress": "In Progress", "done": "Done"}
 IST = timezone(timedelta(hours=5, minutes=30))
 
 
-def task_summary(db, user, reportee_ids, assignee_id=None, status="all", priority="all"):
+def task_summary(db, user, reportee_ids, assignee_id=None, status="all", priority="all",
+                 task_text="", creator_text="", due_from="", due_to="", overdue="all"):
     if status not in {"all", "pending", *STATUS_LABELS}:
         raise HTTPException(400, "Invalid status filter")
     if priority not in {"all", "Low", "Medium", "High"}:
         raise HTTPException(400, "Invalid priority filter")
+    if overdue not in {"all", "yes", "no"}:
+        raise HTTPException(400, "Invalid overdue filter")
+    if len(task_text) > 200 or len(creator_text) > 200:
+        raise HTTPException(400, "Text filters must be at most 200 characters")
+    try:
+        due_from = date.fromisoformat(due_from).isoformat() if due_from else ""
+        due_to = date.fromisoformat(due_to).isoformat() if due_to else ""
+    except ValueError:
+        raise HTTPException(400, "Date filters must be valid ISO dates")
+    if due_from and due_to and due_from > due_to:
+        raise HTTPException(400, "From date must not be after To date")
     query = db.query(Task).options(selectinload(Task.creator), selectinload(Task.assignee))
     if user.role != "Admin":
         query = query.filter(or_(Task.assignee_id.in_([user.id, *reportee_ids]), Task.creator_id == user.id))
@@ -36,6 +48,13 @@ def task_summary(db, user, reportee_ids, assignee_id=None, status="all", priorit
              "priority": task.priority, "due_date": task.due_date,
              "overdue": task.status != "done" and task.due_date < today}
             for task in query.order_by(Task.due_date, Task.id).all()]
+    # Filter only the already-authorized rows; matching is literal, not SQL wildcard search.
+    rows = [row for row in rows
+            if (not task_text.strip() or task_text.strip().casefold() in f"#{row['id']} {row['title']}".casefold())
+            and (not creator_text.strip() or creator_text.strip().casefold() in row["creator"].casefold())
+            and (not due_from or row["due_date"] >= due_from)
+            and (not due_to or row["due_date"] <= due_to)
+            and (overdue == "all" or row["overdue"] == (overdue == "yes"))]
     # Employee choices remain stable when the status/priority filters change.
     people = db.query(User).join(Task, Task.assignee_id == User.id)
     if user.role != "Admin":

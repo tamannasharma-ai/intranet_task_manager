@@ -439,19 +439,24 @@ def ai_chat(payload: AIQuestion, db: Session = Depends(get_db), current_user: Us
 
 @app.get("/api/reports/tasks")
 def get_task_summary(assignee_id: int | None = None, status: str = "all", priority: str = "all",
+                     task_text: str = "", creator_text: str = "", due_from: str = "", due_to: str = "", overdue: str = "all",
                      db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     from app.task_reports import task_summary
-    return task_summary(db, current_user, get_all_reportee_ids(db, current_user), assignee_id, status, priority)
+    return task_summary(db, current_user, get_all_reportee_ids(db, current_user), assignee_id, status, priority,
+                        task_text, creator_text, due_from, due_to, overdue)
 
 
 @app.get("/api/reports/tasks.pdf")
 def download_task_summary(assignee_id: int | None = None, status: str = "all", priority: str = "all",
+                     task_text: str = "", creator_text: str = "", due_from: str = "", due_to: str = "", overdue: str = "all",
                           db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     from app.task_reports import summary_pdf
-    summary = get_task_summary(assignee_id, status, priority, db, current_user)
+    summary = get_task_summary(assignee_id=assignee_id, status=status, priority=priority,
+                               task_text=task_text, creator_text=creator_text, due_from=due_from,
+                               due_to=due_to, overdue=overdue, db=db, current_user=current_user)
     employee = next((person for person in summary["employees"] if person["id"] == assignee_id), None)
     assignee_label = f"{employee['name']} ({employee['email']})" if employee else ("Selected employee" if assignee_id is not None else "All visible employees")
-    pdf = summary_pdf(summary, current_user.name, f"Assigned to: {assignee_label} | Status: {status} | Priority: {priority}")
+    pdf = summary_pdf(summary, current_user.name, f"Assigned to: {assignee_label} | Status: {status} | Priority: {priority} | Task: {task_text or 'All'} | Assigned by: {creator_text or 'All'} | Due: {due_from or 'Any'} to {due_to or 'Any'} | Overdue: {overdue}")
     return Response(pdf, media_type="application/pdf", headers={
         "Content-Disposition": 'attachment; filename="task-summary.pdf"', "Cache-Control": "no-store"})
 

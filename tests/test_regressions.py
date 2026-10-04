@@ -237,6 +237,37 @@ class TaskRegressions(unittest.TestCase):
             client.return_value.__enter__.return_value.post.assert_called_once()
         _requests.clear()
 
+    def test_summary_column_filters_and_pdf_match(self):
+        from io import BytesIO
+        from pypdf import PdfReader
+        task_id = self.create()
+        with self.sessions() as db:
+            task = db.get(Task, task_id)
+            task.due_date = "2000-01-15"
+            task.priority = "High"
+            db.add(Task(title="Hidden report", creator_id=self.outsider, assignee_id=self.outsider,
+                        due_date="2000-01-15", priority="High"))
+            db.commit()
+        params = dict(task_text=f"#{task_id} report", creator_text="MANAGER", assignee_id=self.worker,
+                      status="pending", priority="High", due_from="2000-01-01", due_to="2000-01-31", overdue="yes")
+        result = self.client.get('/api/reports/tasks', params=params, headers=self.headers(self.manager))
+        self.assertEqual(result.status_code, 200, result.text)
+        self.assertEqual([row['id'] for row in result.json()['tasks']], [task_id])
+        self.assertEqual(result.json()['totals']['overdue'], 1)
+        pdf = self.client.get('/api/reports/tasks.pdf', params=params, headers=self.headers(self.manager))
+        self.assertEqual(pdf.status_code, 200)
+        text = '\n'.join(page.extract_text() for page in PdfReader(BytesIO(pdf.content)).pages)
+        self.assertIn('Report', text)
+        self.assertNotIn('Hidden report', text)
+        for extra in ({'overdue':'no'}, {'task_text':'%'}, {'creator_text':'Other'}, {'due_from':'2000-01-16'}):
+            result = self.client.get('/api/reports/tasks', params={**params, **extra}, headers=self.headers(self.manager))
+            self.assertEqual(result.json()['totals']['total'], 0)
+            self.assertEqual(result.json()['tasks'], [])
+        for extra in ({'due_from':'invalid'}, {'due_from':'2000-02-01'}, {'overdue':'invalid'}, {'task_text':'x'*201}):
+            for endpoint in ('/api/reports/tasks', '/api/reports/tasks.pdf'):
+                result = self.client.get(endpoint, params={**params, **extra}, headers=self.headers(self.manager))
+                self.assertEqual(result.status_code, 400, result.text)
+
     def test_summary_and_pdf_permissions_filters(self):
         from io import BytesIO
         from pypdf import PdfReader

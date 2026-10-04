@@ -215,7 +215,7 @@ Any signed-in employee can create a category. Names are 1–80 characters; white
 
 ## Reports and PDF export
 
-Task Summary supports employee, status, and priority filters. Status options are All, Pending, To Do, In Progress, and Done. Pending combines To Do and In Progress.
+Task Summary has filters under every column heading: task title or ID (literal, case-insensitive text), assigned-by name (case-insensitive text), assigned-to employee, status, priority, inclusive due-date range, and overdue Yes/No. Filters combine with AND; text filters allow up to 200 characters. Clear filters restores the full authorized view. Invalid dates and reversed date ranges are rejected. Totals and PDF exports use the same filters. Status options are All, Pending, To Do, In Progress, and Done. Pending combines To Do and In Progress.
 
 Administrators can report on all tasks. Other users can report on tasks assigned to themselves or descendants, plus tasks they created. This is deliberately broader than My Desk's creator/assignee scope. A filter never expands authorization.
 
@@ -310,7 +310,7 @@ Interactive schemas are available at `/docs`; the machine-readable schema is `/o
 - `POST /api/tasks`: create task; fields and assignment restrictions described above.
 - `PUT /api/tasks/{task_id}`: partial task update by its assignee.
 - `DELETE /api/tasks/{task_id}`: delete by its assignee.
-- `GET /api/reports/tasks`: optional `assignee_id`, `status`, and `priority` filters.
+- `GET /api/reports/tasks`: optional `assignee_id`, `status`, `priority`, `task_text`, `creator_text`, `due_from`, `due_to`, and `overdue` (`all`, `yes`, `no`) filters.
 - `GET /api/reports/tasks.pdf`: same filters, returns PDF bytes.
 - `GET /api/ai/config`: safe configuration flags, model, and setup message; no key value.
 - `POST /api/ai/chat`: `question`, `mode` (`question` or `summary`), optional `assignee_id`, and `status`.
