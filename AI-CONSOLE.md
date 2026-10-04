@@ -29,7 +29,7 @@ Questions, task titles, descriptions, assignee/creator names, dates, priorities 
 
 The assistant has no write tools, SQL access or filesystem access. Permissions are enforced before constructing the prompt, using the same scope as Task Summary. AI-generated answers are rendered as plain text. Task content is treated as untrusted input. Answers may still be inaccurate and should be checked against task records.
 
-Totals cover all tasks matching the authorized filters. Details are bounded to the first 100 tasks ordered by due date, further limited to 24,000 serialized characters; descriptions are truncated to 800 characters. The UI reports partial context explicitly. Narrow filters for detailed questions about a larger workload. Summaries are generated on demand and are displayed in the console; the existing PDF report remains a factual task table.
+Totals cover all tasks matching the authorized filters. Details are bounded to the first 30 tasks ordered by due date, further limited to 12,000 serialized UTF-8 bytes; descriptions are truncated to 400 characters. The UI reports partial context explicitly. Narrow filters for detailed questions about a larger workload. Summaries are generated on demand and are displayed in the console; the existing PDF report remains a factual task table.
 
 ## References
 

@@ -58,13 +58,15 @@ def answer_question(db, user, reportee_ids, payload):
         return {"answer": "No visible tasks match these filters.", "model": MODEL, "included_tasks": 0,
                 "total_tasks": 0, "partial": False, "sources": []}
     # Minimize disclosure: no employee directory, emails, credentials, or audit logs.
-    rows = report["tasks"][:100]
+    # Leave room for instructions, totals, the question and JSON overhead under
+    # Groq's free-plan input-token limit. Totals still cover the entire report.
+    rows = report["tasks"][:30]
     descriptions = dict(db.query(Task.id, Task.summary).filter(Task.id.in_([row["id"] for row in rows])).all())
     selected, used = [], 0
     for row in rows:
-        item = {**row, "description": (descriptions.get(row["id"]) or "")[:800]}
-        size = len(json.dumps(item, ensure_ascii=False))
-        if used + size > 24000:
+        item = {**row, "description": (descriptions.get(row["id"]) or "")[:400]}
+        size = len(json.dumps(item, ensure_ascii=False).encode("utf-8"))
+        if used + size > 12000:
             break
         selected.append(item)
         used += size
@@ -93,11 +95,17 @@ def answer_question(db, user, reportee_ids, payload):
     try:
         with httpx.Client(timeout=httpx.Timeout(45, connect=10), follow_redirects=False) as client:
             response = client.post("https://api.groq.com/openai/v1/chat/completions",
-                                   headers={"Authorization": "Bearer " + os.environ["GROQ_API_KEY"]}, json=body)
+                                   headers={"Authorization": "Bearer " + os.environ["GROQ_API_KEY"].strip()}, json=body)
+        if response.status_code == 413:
+            raise HTTPException(413, "The selected task details exceed Groq's request limit. Filter by employee or status and try again. No paid fallback is used.")
         if response.status_code == 429:
             raise HTTPException(429, "Groq free-plan limit reached. Wait and try again; no paid fallback is used.")
         if response.status_code in (401, 403):
             raise HTTPException(503, "Groq rejected the API key or model access. Ask the administrator to check setup.")
+        if response.status_code == 404:
+            raise HTTPException(502, "The configured Groq model is unavailable for this account. Ask the administrator to check model access.")
+        if response.status_code == 400:
+            raise HTTPException(502, "Groq rejected the request settings. Ask the administrator to check the configured model and supported parameters.")
         if not response.is_success:
             raise HTTPException(502, "Groq could not answer. Check model availability or try again later.")
         answer = response.json()["choices"][0]["message"]["content"]

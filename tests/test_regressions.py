@@ -197,8 +197,8 @@ class TaskRegressions(unittest.TestCase):
             self.assertEqual(result.status_code, 200, result.text)
             self.assertTrue(result.json()['partial'])
             self.assertEqual(result.json()['total_tasks'], 110)
-            self.assertLess(result.json()['included_tasks'], 100)
-            self.assertLess(len(post.call_args.kwargs['json']['messages'][1]['content']), 26000)
+            self.assertLessEqual(result.json()['included_tasks'], 30)
+            self.assertLess(len(post.call_args.kwargs['json']['messages'][1]['content'].encode('utf-8')), 14000)
         _requests.clear()
 
     def test_ai_limits_and_safe_provider_errors(self):
@@ -217,6 +217,23 @@ class TaskRegressions(unittest.TestCase):
             result = self.client.post('/api/ai/chat', headers=self.headers(self.manager), json={'mode':'summary'})
             self.assertEqual(result.status_code, 429)
             client.return_value.__enter__.return_value.post.assert_not_called()
+        _requests.clear()
+
+    def test_ai_oversized_request_has_actionable_safe_error(self):
+        from unittest.mock import patch, MagicMock
+        from app.ai_console import _requests
+        _requests.clear()
+        self.create()
+        reply = MagicMock(status_code=413, is_success=False)
+        reply.text = 'private organization details test-secret'
+        with patch.dict(os.environ, {'GROQ_API_KEY':'test-secret', 'GROQ_FREE_TIER_CONFIRMED':'true'}), patch('app.ai_console.httpx.Client') as client:
+            client.return_value.__enter__.return_value.post.return_value = reply
+            result = self.client.post('/api/ai/chat', headers=self.headers(self.manager), json={'mode':'summary'})
+            self.assertEqual(result.status_code, 413)
+            self.assertIn('Filter by employee or status', result.json()['detail'])
+            self.assertNotIn('test-secret', result.text)
+            self.assertNotIn('private organization', result.text)
+            client.return_value.__enter__.return_value.post.assert_called_once()
         _requests.clear()
 
     def test_summary_and_pdf_permissions_filters(self):
