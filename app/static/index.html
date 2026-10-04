@@ -6,12 +6,30 @@
   <title>Continuum</title>
   <script src="/vendor/tailwindcdn.js"></script>
   <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="/vendor/continuum-theme.css?v=4" />
+  <style>
+    .task-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-left-width: 5px;
+      transition: box-shadow 160ms ease, border-color 160ms ease;
+    }
+    .task-card-high { background: #fff1f2; border-color: #fecdd3; border-left-color: #e11d48; }
+    .task-card-medium { background: #fffbeb; border-color: #fde68a; border-left-color: #d97706; }
+    .task-card-low { background: #ecfdf5; border-color: #a7f3d0; border-left-color: #059669; }
+    .task-card-high:hover { box-shadow: 0 4px 14px #e11d4818; }
+    .task-card-medium:hover { box-shadow: 0 4px 14px #d9770618; }
+    .task-card-low:hover { box-shadow: 0 4px 14px #05966918; }
+    .task-card .task-description, .task-card .task-footer { color: #475569; }
+    .task-card .task-footer { border-color: #cbd5e1; }
+    @media (prefers-reduced-motion: reduce) { .task-card { transition: none; } }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="continuum-wallpaper dashboard-workspace text-slate-800 font-sans antialiased flex flex-col">
 
   <!-- TOP BAR -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="app-topbar px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold shadow-xs">
           <i class="fa-solid fa-clock-rotate-left"></i>
@@ -28,15 +46,6 @@
           <p id="current-user-name" class="text-sm font-semibold text-slate-800">-</p>
           <p id="current-user-role" class="text-xs text-indigo-600 font-medium">-</p>
         </div>
-        <button id="manage-employees-button" onclick="openEmployeeManagement()" class="hidden rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700">Manage Employees</button>
-        <button id="import-users-button" onclick="openImportUsersModal()" class="hidden inline-flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100">
-          <i class="fa-solid fa-file-import"></i>
-          <span>Import Employees</span>
-        </button>
-        <button onclick="openChangePasswordModal()" class="inline-flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100">
-          <i class="fa-solid fa-key"></i>
-          <span>Change Password</span>
-        </button>
         <button onclick="logout()" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100">
           <i class="fa-solid fa-right-from-bracket"></i>
           <span>Logout</span>
@@ -49,9 +58,46 @@
   </header>
 
   <!-- MAIN VIEW -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  <div class="workspace-shell">
+    <aside class="workspace-sidebar" aria-label="Workspace navigation">
+      <p class="sidebar-eyebrow">WORKSPACE</p>
+      <nav class="workspace-nav" aria-label="Task views">
+        <button onclick="setFilter('all')" id="tab-all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-xs"><i class="fa-solid fa-house" aria-hidden="true"></i><span>My Desk</span></button>
+        <button onclick="setFilter('personal')" id="tab-personal" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Personal Tasks</span></button>
+        <button onclick="setFilter('assigned-by-ro')" id="tab-assigned-by-ro" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-inbox" aria-hidden="true"></i><span>Assigned by RO</span></button>
+        <button onclick="setFilter('delegated-by-me')" id="tab-delegated-by-me" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center gap-1.5">
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+          <span>Assigned by Me</span>
+        </button>
+        <button onclick="setFilter('team-hierarchy')" id="tab-team" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 flex items-center gap-1.5">
+          <i class="fa-solid fa-users-gear text-xs"></i>
+          <span>Team Workload</span>
+        </button>
+        <button onclick="setFilter('summary')" id="tab-summary" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i><span>Task Summary</span></button>
+        <button onclick="setFilter('ai')" id="tab-ai" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>AI Console</span></button>
+        <button onclick="setFilter('shared')" id="tab-shared" class="hidden px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>Shared with Me</span></button>
+      </nav>
+      <div class="sidebar-account">
+        <p class="sidebar-eyebrow">ACCOUNT &amp; TEAM</p>
+        <button id="manage-employees-button" onclick="openEmployeeManagement()" class="hidden rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700">Manage Employees</button>
+        <button id="import-users-button" onclick="openImportUsersModal()" class="hidden inline-flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100">
+          <i class="fa-solid fa-file-import"></i>
+          <span>Import Employees</span>
+        </button>
+        <button onclick="openChangePasswordModal()" class="inline-flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100">
+          <i class="fa-solid fa-key"></i>
+          <span>Change Password</span>
+        </button>
+      </div>
+      <div class="sidebar-note"><i class="fa-solid fa-circle-check" aria-hidden="true"></i><p>Clarity for your day.<br><span>Plan. Delegate. Deliver.</span></p></div>
+    </aside>
+  <main class="workspace-main space-y-6">
+    <div class="workspace-heading">
+      <div><p class="workspace-eyebrow">YOUR WORK, IN FOCUS</p><h2 id="view-title">My Desk</h2><p id="view-description">Your pending assignments and delegated work, organized by priority.</p></div>
+      <button onclick="openModal()" class="create-task-button"><i class="fa-solid fa-plus" aria-hidden="true"></i> Create / Assign Task</button>
+    </div>
     <!-- KPIS -->
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <section id="workspace-kpis" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Visible Tasks</p>
@@ -85,31 +131,6 @@
       </div>
     </section>
 
-    <!-- TABS & ACTIONS -->
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-      <div class="flex flex-wrap items-center gap-2">
-        <button onclick="setFilter('all')" id="tab-all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-xs">My Desk</button>
-        <button onclick="setFilter('ai')" id="tab-ai" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">AI Console</button>
-        <button onclick="setFilter('summary')" id="tab-summary" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Task Summary</button>
-        <button onclick="setFilter('personal')" id="tab-personal" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Personal Tasks</button>
-        <button onclick="setFilter('assigned-by-ro')" id="tab-assigned-by-ro" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Assigned by RO</button>
-        <button onclick="setFilter('shared')" id="tab-shared" class="hidden px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200">Shared with Me</button>
-        <button onclick="setFilter('delegated-by-me')" id="tab-delegated-by-me" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center gap-1.5">
-          <i class="fa-solid fa-paper-plane text-xs"></i>
-          <span>Assigned by Me</span>
-        </button>
-        <button onclick="setFilter('team-hierarchy')" id="tab-team" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 flex items-center gap-1.5">
-          <i class="fa-solid fa-users-gear text-xs"></i>
-          <span>Direct Reportees Workload</span>
-        </button>
-      </div>
-
-      <button onclick="openModal()" class="w-full md:w-auto px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-xs flex items-center justify-center space-x-2">
-        <i class="fa-solid fa-plus text-xs"></i>
-        <span>Create / Assign Task</span>
-      </button>
-    </div>
-
     <section id="ai-panel" class="hidden bg-white rounded-xl border border-slate-200 p-5 space-y-4">
       <h2 class="font-bold text-lg">Task AI Console</h2>
       <p class="text-sm text-slate-500">Ask about assignments, progress, due dates and priorities, or generate a summary. Each question uses a fresh task snapshot. Authorized task details and your question are sent to Groq. Answers can be mistaken; verify task IDs before acting.</p>
@@ -140,6 +161,12 @@
     </section>
 
     <!-- KANBAN BOARD -->
+    <div id="priority-legend" class="flex flex-wrap items-center gap-3 text-xs text-slate-600" aria-label="Task priority color legend">
+      <span class="font-semibold">Task priority</span>
+      <span class="rounded-full bg-rose-100 text-rose-800 px-3 py-1">High - red</span>
+      <span class="rounded-full bg-amber-100 text-amber-800 px-3 py-1">Medium - amber</span>
+      <span class="rounded-full bg-emerald-100 text-emerald-800 px-3 py-1">Low - green</span>
+    </div>
     <section id="kanban-board" class="grid grid-cols-1 md:grid-cols-3 gap-5">
       <div class="bg-slate-100/90 rounded-xl p-4 border border-slate-200 flex flex-col">
         <div class="flex items-center justify-between mb-3">
@@ -190,6 +217,7 @@
       </div>
     </div>
   </main>
+  </div>
 
   <!-- MODAL: ADD / EDIT -->
   <div id="taskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden">
@@ -820,6 +848,7 @@
       document.getElementById('ai-panel').classList.toggle('hidden', !ai);
       document.getElementById('task-summary-panel').classList.toggle('hidden', !summary);
       document.getElementById('kanban-board').classList.toggle('hidden', summary || ai);
+      document.getElementById('priority-legend').classList.toggle('hidden', summary || ai);
       document.getElementById('pagination-controls').classList.toggle('hidden', summary || ai);
       if (ai) return loadAIConsole();
       if (summary) return fetchSummary();
@@ -827,7 +856,7 @@
         headers: { "Authorization": "Bearer " + authToken }
       });
       await requireSuccess(res);
-      currentTasks = await res.json();
+      currentTasks = (await res.json()).sort(compareTaskOrder);
       renderBoard();
     }
 
@@ -839,15 +868,37 @@
     }
 
     function updateFilterTabStyles() {
+      const viewLabels = {
+        all: ['My Desk', 'Your pending assignments and delegated work, organized by priority.'],
+        personal: ['Personal Tasks', 'Tasks you created for yourself, from first step to completion.'],
+        'assigned-by-ro': ['Assigned by RO', 'Work assigned to you by your reporting officer.'],
+        'delegated-by-me': ['Assigned by Me', 'Follow the work you delegated and see who is responsible.'],
+        'team-hierarchy': [currentUser?.role === 'Admin' ? 'All Users Workload' : 'Team Workload', 'A clear view of assignments across your reporting hierarchy.'],
+        summary: ['Task Summary', 'Explore task status and download a filtered PDF report.'],
+        ai: ['AI Console', 'Ask questions and summarize the task information you can access.'],
+        shared: ['Shared with Me', 'Shared task assignments.']
+      };
+      const view = viewLabels[activeFilter] || viewLabels.all;
+      document.getElementById('view-title').textContent = view[0];
+      document.getElementById('view-description').textContent = view[1];
       ["all", "personal", "summary", "ai", "assigned-by-ro", "shared", "delegated-by-me", "team"].forEach(tab => {
         const el = document.getElementById("tab-" + tab);
         if (!el) return;
         if ((tab === "team" && activeFilter === "team-hierarchy") || tab === activeFilter) {
+          el.setAttribute("aria-current", "page");
           el.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-xs flex items-center gap-1.5";
         } else {
+          el.removeAttribute("aria-current");
           el.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center gap-1.5";
         }
       });
+    }
+
+    function compareTaskOrder(a, b) {
+      const priorityRank = {High: 0, Medium: 1, Low: 2};
+      return (priorityRank[a.priority] ?? 3) - (priorityRank[b.priority] ?? 3)
+        || (a.due_date || '9999-12-31').localeCompare(b.due_date || '9999-12-31')
+        || a.id - b.id;
     }
 
     function getVisibleTasks() {
@@ -921,20 +972,35 @@
       updatePagination();
     }
 
+    function taskDueLabel(task, now = new Date()) {
+      const date = task.due_date || '';
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+      if (!match) return {label: date || 'No due date', tone: 'due-normal'};
+      if (task.status === 'done') return {label: 'Finished', tone: 'due-finished'};
+      const days = Math.round((Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+        - Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+      if (days < 0) return {label: `${-days} day${days === -1 ? '' : 's'} overdue`, tone: 'due-overdue'};
+      if (days === 0) return {label: 'Due today', tone: 'due-today'};
+      if (days === 1) return {label: 'Due tomorrow', tone: 'due-normal'};
+      return {label: `Due in ${days} days`, tone: 'due-normal'};
+    }
+
     function createCard(task) {
       const card = document.createElement("div");
-      card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition space-y-2.5";
+      const tileClass = {High: 'task-card-high', Medium: 'task-card-medium', Low: 'task-card-low'};
+      card.className = `task-card ${tileClass[task.priority] || ''} p-4 rounded-xl shadow-xs space-y-2.5`;
 
       const priorityColors = {
-        High: "bg-rose-50 text-rose-700 border-rose-200",
-        Medium: "bg-amber-50 text-amber-700 border-amber-200",
-        Low: "bg-slate-50 text-slate-700 border-slate-200"
+        High: "bg-rose-100 text-rose-800 border-rose-300",
+        Medium: "bg-amber-100 text-amber-800 border-amber-300",
+        Low: "bg-emerald-100 text-emerald-800 border-emerald-300"
       };
 
       const isROTask = task.creator_id !== task.assignee_id && task.creator.id === currentUser.manager_id;
       const isDelegatedByMe = task.creator_id === currentUser.id && task.assignee_id !== currentUser.id;
       const canModifyTask = task.assignee_id === currentUser.id;
       const categoryName = task.category?.name || "Uncategorized";
+      const due = taskDueLabel(task);
 
       card.innerHTML = `
         <div class="flex items-center justify-between">
@@ -942,34 +1008,34 @@
             <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${priorityColors[task.priority]}">${task.priority}</span>
             <span class="text-[10px] font-semibold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded">${escapeHtml(categoryName)}</span>
           </div>
-          <div class="flex items-center space-x-2 text-slate-400 text-xs">
-            <button onclick="viewHistory(${task.id})" title="History" class="hover:text-indigo-600 flex items-center gap-1 font-medium text-slate-500">
+          <div class="task-actions flex items-center space-x-2 text-slate-400 text-xs">
+            <button onclick="viewHistory(${task.id})" title="View task history" aria-label="View task history" class="hover:text-indigo-600 flex items-center gap-1 font-medium text-slate-500">
               <i class="fa-solid fa-clock-rotate-left"></i>
               <span class="text-[10px]">${task.history?.length || 0}</span>
             </button>
             ${canModifyTask ? `
-              <button onclick="editTask(${task.id})" class="hover:text-indigo-600"><i class="fa-regular fa-pen-to-square"></i></button>
-              <button onclick="deleteTask(${task.id})" class="hover:text-rose-600"><i class="fa-regular fa-trash-can"></i></button>
+              <button onclick="editTask(${task.id})" title="Edit task" aria-label="Edit task" class="hover:text-indigo-600"><i class="fa-regular fa-pen-to-square"></i></button>
+              <button onclick="deleteTask(${task.id})" title="Delete task" aria-label="Delete task" class="hover:text-rose-600"><i class="fa-regular fa-trash-can"></i></button>
             ` : ""}
           </div>
         </div>
 
         <div>
-          <h3 class="font-bold text-slate-900 text-sm leading-snug">${escapeHtml(task.title)}</h3>
-          <p class="text-xs text-slate-500 mt-1 line-clamp-2">${escapeHtml(task.summary || 'No description.')}</p>
+          <h3 class="task-title font-bold text-slate-900 leading-snug">${escapeHtml(task.title)}</h3>
+          <p class="task-description text-xs mt-1 line-clamp-2">${escapeHtml(task.summary || 'No description.')}</p>
         </div>
 
         ${isDelegatedByMe ? `<div class="text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded">Delegated to ${escapeHtml(task.assignee.name)}</div>` : ''}
         ${isROTask ? `<div class="text-[11px] font-semibold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">Assigned by RO (${escapeHtml(task.creator.name)})</div>` : ''}
 
-        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <div class="flex items-center space-x-1">
-            <i class="fa-regular fa-calendar text-slate-400"></i>
-            <span>${task.due_date}</span>
+        <div class="task-footer pt-2 border-t flex items-center justify-between text-xs">
+          <div class="task-due-block">
+            <span class="due-label ${due.tone}">${escapeHtml(due.label)}</span>
+            <span class="task-date"><i class="fa-regular fa-calendar" aria-hidden="true"></i> ${escapeHtml(task.due_date)}</span>
           </div>
           <div class="flex items-center space-x-1 font-medium text-slate-700">
             <i class="fa-regular fa-circle-user text-indigo-500"></i>
-            <span>${escapeHtml(task.assignee.name.split(' ')[0])}</span>
+            <span>${escapeHtml(task.assignee.name)}</span>
           </div>
         </div>
       `;

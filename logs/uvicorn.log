@@ -99,3 +99,279 @@ INFO:     127.0.0.1:8630 - "GET /api/users HTTP/1.1" 200 OK
 INFO:     127.0.0.1:8630 - "GET /api/categories HTTP/1.1" 200 OK
 {"timestamp":"2026-10-03T06:57:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2add8704e19d45c8963068a78cd94be6","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":16.73,"client_ip":"127.0.0.1"}
 INFO:     127.0.0.1:8630 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T07:02:20Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e2300f1d8cbf420381313619e528d4d6","method":"GET","path":"/dashboard","status_code":200,"duration_ms":126.55,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10018 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T07:02:20Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"4d1608c6c97042a286f4a9ee801357b5","method":"GET","path":"/api/users","status_code":200,"duration_ms":7.77,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10018 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T07:02:20Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2c3ba3737f1047099ed86f4ffd817435","method":"GET","path":"/api/categories","status_code":200,"duration_ms":11.18,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10018 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T07:02:20Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"5494ea0e9db24367a65b55ee328b89a0","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":19.98,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10018 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:54:17Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"9b3416ff89b44a5b8a3bdc21eea20509","method":"GET","path":"/dashboard","status_code":200,"duration_ms":363.52,"client_ip":"172.16.53.34"}
+INFO:     172.16.53.34:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:54:45Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"f0117eb663e64c80b3ae3fab7f2f49a5","method":"GET","path":"/dashboard","status_code":200,"duration_ms":8.11,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13130 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:54:45Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d3a13823c5be4b56b9d97b770e07bead","method":"GET","path":"/api/users","status_code":200,"duration_ms":10.99,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13130 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:54:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"cc826bd43df242c197580d3896c41d38","method":"GET","path":"/api/categories","status_code":200,"duration_ms":8.93,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13130 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:54:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e64c63a3d33a4c25ba65cb13be5c0fef","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":21.66,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13130 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:56:49Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"0af9a08ed7504e63865a5185435d5797","method":"GET","path":"/dashboard","status_code":200,"duration_ms":6.99,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:7734 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:56:49Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"69110b8fc1e34dd9a2af71d05e8f4f0b","method":"GET","path":"/api/users","status_code":200,"duration_ms":16.97,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:7734 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:56:49Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"167118420f08492c9db82ecbfaf40b74","method":"GET","path":"/api/categories","status_code":200,"duration_ms":8.23,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:7734 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:56:49Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"557bd44f60e64b478b4745daa946428b","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":27.62,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:7734 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:57:48Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"956b1fb63dc54d16808200111f08f51f","method":"GET","path":"/login.html","status_code":200,"duration_ms":1.64,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /login.html HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:57:48Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"eff6e25b631b4750807d3041f65670bf","method":"GET","path":"/api/auth/users","status_code":200,"duration_ms":9.82,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/auth/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:57:57Z","level":"INFO","logger":"continuum","message":"Activity event","event":"LOGIN_SUCCESS"}
+{"timestamp":"2026-10-03T10:57:57Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d5d661b5d65b4f97b5fffc70ad18116f","method":"POST","path":"/api/auth/login","status_code":200,"duration_ms":390.45,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "POST /api/auth/login HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:57:57Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"5a8f1afb2238480281dad6f9d3e4e365","method":"GET","path":"/dashboard","status_code":200,"duration_ms":2.97,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:57:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e126aefa187045e8b9a96e61551405b4","method":"GET","path":"/api/users","status_code":200,"duration_ms":9.3,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:57:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"4c71c7200c9f4bbaa79b8cf6d82b314d","method":"GET","path":"/api/categories","status_code":200,"duration_ms":2.71,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:57:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"053cbc9aa5c041bca897a533beafc233","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":11.86,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:07Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"7c6fd594ef74417ea0bbf0aa124d11c4","method":"GET","path":"/api/ai/config","status_code":200,"duration_ms":6.1,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/ai/config HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:07Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"eba517d5ea5d49888191cb98aa9fa9af","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":33.26,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/reports/tasks HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:11Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"379d9377ff5b4e48afe04cb506350271","method":"POST","path":"/api/ai/chat","status_code":200,"duration_ms":1989.21,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "POST /api/ai/chat HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:26Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"64d1635c2d51402a971e0bb87dc28789","method":"POST","path":"/api/ai/chat","status_code":200,"duration_ms":343.66,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "POST /api/ai/chat HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:41Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e8bbcb907121451c8605e748e3dde943","method":"GET","path":"/dashboard","status_code":200,"duration_ms":5.7,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10148 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:41Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"efbc9fe5bcea41bf828dda46e9ecbab3","method":"GET","path":"/api/users","status_code":200,"duration_ms":9.16,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10148 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:41Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"93c2379336b34209b6c932f843421747","method":"GET","path":"/api/categories","status_code":200,"duration_ms":5.94,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10148 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:58:41Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"de23255b40cb4db5bc034d49cd6e16cb","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":17.7,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10148 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2ee1dcc8763c467ea926c1117ead5a91","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":14.75,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-theme.css?v=1 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"cc553d3748924aa9bc48353ec9f676aa","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":200,"duration_ms":3.96,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"db62d71b2a1c4fff93a848cc0afe5bd4","method":"GET","path":"/dashboard","status_code":200,"duration_ms":5.4,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10958 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"125db42628fb497fb9f963943d26d69a","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":1.55,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10958 - "GET /vendor/continuum-theme.css?v=1 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"391af02ccbe24ef89b242eb3ca8e46e5","method":"GET","path":"/api/users","status_code":200,"duration_ms":22.95,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:10958 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b3a9f3de74004b33b7eb3935fc6b99ba","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":200,"duration_ms":20.62,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e97172d5cbc74375bcb4a8751ed9f4c0","method":"GET","path":"/api/categories","status_code":200,"duration_ms":4.16,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T10:59:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"f6c9948bf2964cda9b2ee6b762ecce82","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":15.87,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"743228bba5324d43bc0eeedc9e490ecd","method":"GET","path":"/dashboard","status_code":200,"duration_ms":6.68,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"aa5853e8be374bd7ae80b6ca4ec496b8","method":"GET","path":"/vendor/continuum-theme.css","status_code":304,"duration_ms":4.22,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /vendor/continuum-theme.css?v=1 HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:00:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"c56ffc4a381148f08699b231ddf7aeff","method":"GET","path":"/api/users","status_code":200,"duration_ms":6.98,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2b14451de9b1468c886f4fb7fa622dfe","method":"GET","path":"/api/categories","status_code":200,"duration_ms":4.73,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a714d19882314c86b68da7e7425b0c8d","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":15.61,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:5365 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:42Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2de0b6635f294cb68248da04d20441ba","method":"GET","path":"/dashboard","status_code":200,"duration_ms":4.95,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:42Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"dd74fc5a7aea46a1ad841b1d738211fa","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":1.18,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /vendor/continuum-theme.css?v=1 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:42Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"7a46c88d7aa945769b0d1e4d6547c613","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":200,"duration_ms":1.04,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:42Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"c8d01800e4aa40448ef89575a87a96c0","method":"GET","path":"/api/users","status_code":200,"duration_ms":10.15,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:42Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6cb64b37197a434f85870e3b4d493fb0","method":"GET","path":"/api/categories","status_code":200,"duration_ms":6.41,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:42Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"1aea360ac56b4ebbb3a507aa9d0843ca","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":16.51,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:44Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d584132bc935408d9bd58d011a7dcdcc","method":"GET","path":"/api/ai/config","status_code":200,"duration_ms":3.48,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/ai/config HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:44Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"832dc9625314486eaf460031c5e143c9","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":10.37,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/reports/tasks HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:00:51Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"4be246ea26a14764b63900956298ce5b","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":25.81,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6d9969b62bfb489dba63e5dcae3c79b7","method":"GET","path":"/","status_code":303,"duration_ms":2.78,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET / HTTP/1.1" 303 See Other
+{"timestamp":"2026-10-03T11:05:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"9e906887510a48568217f5059f51aa2b","method":"GET","path":"/login.html","status_code":200,"duration_ms":2.02,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /login.html HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"7b38b9edf24541c0bac2f037a41e6da8","method":"GET","path":"/vendor/tailwindcdn.js","status_code":200,"duration_ms":6.65,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/tailwindcdn.js HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"158870a1441f4948b6974ecb3411fa6b","method":"GET","path":"/vendor/fontawesome/css/all.min.css","status_code":200,"duration_ms":7.69,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/fontawesome/css/all.min.css HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"36efa4df73ab4ee1a208bc9dd9f1af90","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":9.39,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-theme.css?v=1 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6f9a435376314b80a93d78c8791d5ea5","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":200,"duration_ms":2.67,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"9ae24fe75ba043c08895d69436b61e72","method":"GET","path":"/api/auth/users","status_code":200,"duration_ms":7.97,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/auth/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"30b73bd69d85482d8a06022aa74d04ad","method":"GET","path":"/vendor/fontawesome/webfonts/fa-solid-900.woff2","status_code":200,"duration_ms":1.88,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/fontawesome/webfonts/fa-solid-900.woff2 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"8bd7c0902d8744f0b1d94ed10e89bfd7","method":"GET","path":"/favicon.ico","status_code":404,"duration_ms":3.49,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+{"timestamp":"2026-10-03T11:05:52Z","level":"INFO","logger":"continuum","message":"Activity event","event":"LOGIN_SUCCESS"}
+{"timestamp":"2026-10-03T11:05:52Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"66878c0c024f442cbc648d99974aabad","method":"POST","path":"/api/auth/login","status_code":200,"duration_ms":254.71,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "POST /api/auth/login HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:52Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"696a812db94645b3abe6a7c5b718d22c","method":"GET","path":"/dashboard","status_code":200,"duration_ms":5.22,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:53Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"bedd233d85e54ee29cea0c88b43afa90","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":1.3,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-theme.css?v=2 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:53Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"54642c6f15a441a5a005cad29c631356","method":"GET","path":"/api/users","status_code":200,"duration_ms":14.23,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:53Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"9924f472a90449909c2b6fbc964bfbbf","method":"GET","path":"/api/categories","status_code":200,"duration_ms":6.41,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:53Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"813f829f6ec34b06b0028984f79cbf69","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":13.56,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:53Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"88ec28c73dad4e788296c0df3c7865e7","method":"GET","path":"/vendor/fontawesome/webfonts/fa-regular-400.woff2","status_code":200,"duration_ms":1.75,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/fontawesome/webfonts/fa-regular-400.woff2 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"33609e456dd44f2abd194a41f60fa423","method":"GET","path":"/dashboard","status_code":200,"duration_ms":6.27,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:2153 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d50e86b8025e4dd89fae835a3b19ad4a","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":2.29,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:2153 - "GET /vendor/continuum-theme.css?v=2 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"70f80fe6c6c5417d9a15c095a67856a6","method":"GET","path":"/api/users","status_code":200,"duration_ms":8.33,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:2153 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"151d6b617f9d412cbe2f082f7e58ae89","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":7.22,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:05:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d8b6854d332c49e8902a794aa39f1ad1","method":"GET","path":"/api/categories","status_code":200,"duration_ms":4.07,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:05:59Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"ebd409b712f344b393bc5e7d0bee191c","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":12.96,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e2ab1e788f584a0f84aca8b6586205e3","method":"GET","path":"/api/ai/config","status_code":200,"duration_ms":6.65,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/ai/config HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:03Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a190e7fadf574da9b1877f899bdc2bbe","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":30.63,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/reports/tasks HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:05Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e60bb6ad7f6f4315b25bb9f7205302dc","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":22.43,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/reports/tasks?status=all&priority=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:07Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"53196b38516647bcb61981ff8bcc97ed","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":22.44,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/tasks?filter_type=personal HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:10Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"5501f33e8d0f40829523ef5b048b7150","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":56.77,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/tasks?filter_type=assigned-by-ro HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:11Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a00089d995cd43f691d519f4d7d8eee8","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":29.32,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/tasks?filter_type=delegated-by-me HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"0ea5ea1149874bf2be394e925b9ef88c","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":33.59,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13723 - "GET /api/tasks?filter_type=team-hierarchy HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"5e510e7aa29f46a3a51558701a1e3a63","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":29.37,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/reports/tasks?status=all&priority=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:19Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"8166fdf24fe44892880b912d60ed6318","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":35.38,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:2135 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:06:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"008e3f3845e84b929b763490a491fa7b","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":17.24,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:07:05Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"39e529fc30c54fe5b32581a8934d9284","method":"GET","path":"/dashboard","status_code":200,"duration_ms":6.84,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1569 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:07:05Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"ffc41dc2a6d743ef8b84ecb063c64ded","method":"GET","path":"/vendor/continuum-theme.css","status_code":304,"duration_ms":2.04,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1569 - "GET /vendor/continuum-theme.css?v=2 HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:07:05Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"c4226a45a37a4482814a20aaa13d7de8","method":"GET","path":"/api/users","status_code":200,"duration_ms":12.88,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1569 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:07:05Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"cbe2ac7111964d99895e486b48457746","method":"GET","path":"/api/categories","status_code":200,"duration_ms":9.3,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1569 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:07:05Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"146b5b5d2fc149b19cc6641ed765fe65","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":34.24,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1569 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"36077ae924c44496815f6daaecc25824","method":"GET","path":"/dashboard","status_code":200,"duration_ms":3.56,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:12Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b9b82e570a0a48ca8a9d5ac84cdaea68","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":2.74,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-theme.css?v=3 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:13Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b480bceac51a4495a5c28f9c3bc2221e","method":"GET","path":"/api/users","status_code":200,"duration_ms":4.31,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:13Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e8df89c9b06d4063b3a2c6bc18316ef5","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":4.91,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:08:13Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"8aa09f1261a7449980bef2e6be4fd3aa","method":"GET","path":"/api/categories","status_code":200,"duration_ms":8.53,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:13Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"6cfff84a93c3406e9ef6c6d79d315610","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":9.64,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d44cf1894947498da34f2ab52b9934ee","method":"GET","path":"/dashboard","status_code":200,"duration_ms":5.41,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4419 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"85ea129b83f147789d0f441e9a4c3330","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":1.68,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4419 - "GET /vendor/continuum-theme.css?v=3 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"bb5170346fcf4096a8d2de647da5c9f3","method":"GET","path":"/api/users","status_code":200,"duration_ms":9.0,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4419 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"ffa5fa2c626945bf9c737c5d0f6fed1a","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":8.3,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:3660 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:08:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"2becb583102e4e3f99d64f8cf7535e8c","method":"GET","path":"/api/categories","status_code":200,"duration_ms":6.76,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4419 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:08:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e1edd15ec3f941aca7abd101185060d9","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":17.45,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4419 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:00Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b344641ef3e84e189775bb345d3d67bb","method":"GET","path":"/dashboard","status_code":200,"duration_ms":4.1,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:00Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"7c944e21d6d541d08450d399a3dd53b9","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":1.39,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-theme.css?v=4 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:00Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"46c8f593f1ec4088993f1fb35d726358","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":1.31,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:10:00Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"5105500c6c8a4dd0a2306b20955e0763","method":"GET","path":"/api/users","status_code":200,"duration_ms":7.02,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:00Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a0301c5fedd24287b8e4ac4af1179681","method":"GET","path":"/api/categories","status_code":200,"duration_ms":3.27,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:00Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"612a8b624aac4eb1aa9f669a143ab2a3","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":54.08,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:14Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"190c4c5eaaf4421dab8ac276a732e9da","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":11.98,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:0 - "GET /api/reports/tasks?status=all&priority=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:21Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"f79020e890704fa696d9de22a1920b19","method":"GET","path":"/dashboard","status_code":200,"duration_ms":6.21,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:11806 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:21Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"3da6ee8f17694ec48eb77f4166bc209f","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":1.62,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:11806 - "GET /vendor/continuum-theme.css?v=4 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"f40c5fb6e0364c04a44a15608b5b73f5","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":3.08,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:12805 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:10:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"e39ce1929006462286a7165e4f9af186","method":"GET","path":"/api/users","status_code":200,"duration_ms":9.85,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:11806 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"95e99c44d9204d2a92a7687a0c105adb","method":"GET","path":"/api/categories","status_code":200,"duration_ms":4.75,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:11806 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:22Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d76595663a2446409350b062a107a0ef","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":17.99,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:11806 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"8e20c19a64bd49cd866c86482f6b8755","method":"GET","path":"/api/ai/config","status_code":200,"duration_ms":6.01,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4799 - "GET /api/ai/config HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:32Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"57ac4dbd3f504accadaced29ad8c4eaa","method":"GET","path":"/api/reports/tasks","status_code":200,"duration_ms":28.3,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4799 - "GET /api/reports/tasks HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:37Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"97cab3b84d1841c381cb7a02defc19c6","method":"POST","path":"/api/ai/chat","status_code":200,"duration_ms":440.47,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:4799 - "POST /api/ai/chat HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:44Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"4d959a9403654257a2b245b51a77bc86","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":24.34,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:8931 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:45Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"d8fa2934769b4a2cb013aec930fb238e","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":22.6,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:8931 - "GET /api/tasks?filter_type=personal HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:10:46Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"26c61fded722473da43ec1c6cbf895b8","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":19.64,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:8931 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:41:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"cefe9ad97c834c66af51af246c896b2f","method":"GET","path":"/dashboard","status_code":200,"duration_ms":69.07,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:41:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"287b4027d41840cc9960dc15c620cc9c","method":"GET","path":"/vendor/continuum-theme.css","status_code":200,"duration_ms":2.08,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /vendor/continuum-theme.css?v=4 HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:41:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"f74a765d6df24f70896737d900fd6d03","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":3.47,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:41:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"44fa796582cd4826bda82a3fa56db99a","method":"GET","path":"/api/users","status_code":200,"duration_ms":11.56,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:41:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"97b8a669f373463cbfa4b2869b267372","method":"GET","path":"/api/categories","status_code":200,"duration_ms":9.38,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:41:58Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"23fc5ed87c774366955b1d17af873d61","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":17.73,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:43:55Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"3855340307a24e6eb0db0bd8d6434d3c","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":21.61,"client_ip":"172.16.50.1"}
+INFO:     172.16.50.1:0 - "GET /api/tasks?filter_type=team-hierarchy HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:44:54Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b26345b90393484480e0fc413f5068d0","method":"GET","path":"/dashboard","status_code":200,"duration_ms":5.16,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9148 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:44:55Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a168fa88a0444634980e00243812123c","method":"GET","path":"/vendor/continuum-theme.css","status_code":304,"duration_ms":1.51,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9148 - "GET /vendor/continuum-theme.css?v=4 HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:44:55Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"f3c861d564994d9d94eda39c594f2cc7","method":"GET","path":"/api/users","status_code":200,"duration_ms":10.38,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:9148 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:44:55Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"0f1fa6915ecd4e08aa7f1abd322fafab","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":7.15,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1255 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T11:44:55Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"c2217a8cdbe94b48bb1277fe8bb93059","method":"GET","path":"/api/categories","status_code":200,"duration_ms":6.77,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1255 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T11:44:55Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"b2200e17b1b547e1bd5c6133159e3ee3","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":20.46,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:1255 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T12:49:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"0016b2164f104f369aa28d97251f319b","method":"GET","path":"/dashboard","status_code":200,"duration_ms":49.06,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13795 - "GET /dashboard HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T12:49:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"06fc4fcc03824e0ca7c330ea42afb73a","method":"GET","path":"/vendor/continuum-theme.css","status_code":304,"duration_ms":1.64,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13795 - "GET /vendor/continuum-theme.css?v=4 HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T12:49:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"a9d8a10a834a4e4cb47ee89b6b045b43","method":"GET","path":"/api/users","status_code":200,"duration_ms":7.15,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13795 - "GET /api/users HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T12:49:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"da2e61d91b234596aceb1727fa8a59a4","method":"GET","path":"/vendor/continuum-wallpaper.svg","status_code":304,"duration_ms":6.57,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:12340 - "GET /vendor/continuum-wallpaper.svg HTTP/1.1" 304 Not Modified
+{"timestamp":"2026-10-03T12:49:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"64cc536f03194035a200d485d5219299","method":"GET","path":"/api/categories","status_code":200,"duration_ms":17.81,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13795 - "GET /api/categories HTTP/1.1" 200 OK
+{"timestamp":"2026-10-03T12:49:47Z","level":"INFO","logger":"continuum","message":"HTTP request","request_id":"718a31ca266742f5b216cd0cfa734ba9","method":"GET","path":"/api/tasks","status_code":200,"duration_ms":43.03,"client_ip":"127.0.0.1"}
+INFO:     127.0.0.1:13795 - "GET /api/tasks?filter_type=all HTTP/1.1" 200 OK

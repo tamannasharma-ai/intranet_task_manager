@@ -7,13 +7,20 @@ scripts.forEach(script => new vm.Script(script));
 const code = scripts.join('\n');
 const context = {document: {createElement: () => ({})}, currentUser: {id: 1, manager_id: 2}};
 vm.createContext(context);
-for (const name of ['escapeHtml', 'createCard', 'localDateToday', 'formatTime', 'logout']) {
+for (const name of ['escapeHtml', 'taskDueLabel', 'createCard', 'localDateToday', 'formatTime', 'logout']) {
   const prefix = name === 'logout' ? '    async function ' : '    function ';
   const start = code.indexOf(prefix + name + '(');
   assert.ok(start >= 0);
   const end = code.indexOf('\n    }', start) + 6;
   vm.runInContext(code.slice(start, end), context);
 }
+const today = new Date(2026, 9, 3, 12);
+assert.equal(context.taskDueLabel({due_date:'2026-10-03',status:'todo'}, today).label, 'Due today');
+assert.equal(context.taskDueLabel({due_date:'2026-10-04',status:'todo'}, today).label, 'Due tomorrow');
+assert.equal(context.taskDueLabel({due_date:'2026-09-30',status:'inprogress'}, today).label, '3 days overdue');
+assert.equal(context.taskDueLabel({due_date:'2026-09-30',status:'done'}, today).label, 'Finished');
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(new Set(ids).size, ids.length, 'Duplicate UI control IDs');
 const hostile = '<img src=x onerror=alert(1)>';
 context.task = {id: 1, title: hostile, summary: hostile, priority: 'High', creator_id: 2, assignee_id: 1,
   creator: {id:2,name:hostile}, assignee: {name:hostile}, category: {name:hostile}, due_date:'2026-10-03',history:[]};
