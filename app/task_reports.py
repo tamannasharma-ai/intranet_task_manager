@@ -57,13 +57,13 @@ def summary_pdf(summary, requested_by, filters):
 
     stream = BytesIO()
     doc = SimpleDocTemplate(stream, pagesize=landscape(A4), leftMargin=32, rightMargin=32,
-                            topMargin=32, bottomMargin=34, title="Continuum Task Summary")
+                            topMargin=32, bottomMargin=34, title="TaskOrbit Task Summary")
     styles = getSampleStyleSheet()
     cell = ParagraphStyle("ReportCell", fontName="Helvetica", fontSize=8, leading=11, wordWrap="CJK")
     def paragraph(value):
         return Paragraph(escape(str(value)), cell)
     totals = summary["totals"]
-    content = [Paragraph("Continuum | Task Summary", styles["Title"]),
+    content = [Paragraph("TaskOrbit | Task Summary", styles["Title"]),
                Paragraph(escape(f"Prepared for {requested_by} | {summary['generated_at'][:19].replace('T', ' ')} IST"), styles["Normal"]),
                Spacer(1, 7), Paragraph(escape(filters), styles["Normal"]), Spacer(1, 9),
                Paragraph(f"Total: {totals['total']} &nbsp; Pending: {totals['pending']} &nbsp; Completed: {totals['done']} &nbsp; Overdue: {totals['overdue']}", styles["Normal"]), Spacer(1, 14)]
@@ -86,7 +86,7 @@ def summary_pdf(summary, requested_by, filters):
         content.append(table)
     def footer(canvas, document):
         canvas.setFont("Helvetica", 8)
-        canvas.drawString(32, 18, "Continuum - task status at time of download | Dates: Asia/Kolkata")
+        canvas.drawString(32, 18, "TaskOrbit - task status at time of download | Dates: Asia/Kolkata")
         canvas.drawRightString(810, 18, f"Page {document.page}")
     doc.build(content, onFirstPage=footer, onLaterPages=footer)
     return stream.getvalue()

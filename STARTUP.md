@@ -1,4 +1,4 @@
-# Starting Continuum on Windows
+# Starting TaskOrbit on Windows
 
 Double-click `start-app.cmd` to start the application. Open http://127.0.0.1 after it reports **Application is ready**. Service processes run in hidden windows; the launcher itself displays progress and errors.
 

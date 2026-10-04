@@ -1,6 +1,10 @@
-# Continuum — Work Management Demo
+# TaskOrbit — Work Management Demo
 
-Continuum is a browser-based task manager for personal work, reporting-officer assignments, team workload tracking, task history, filtered reports, and a read-only Groq AI assistant.
+**कार्याणां सुव्यवस्था, समूहस्य प्रगतिः।**
+
+*Well-organized tasks, progress for the team.*
+
+TaskOrbit is a browser-based task manager for personal work, reporting-officer assignments, team workload tracking, task history, filtered reports, and a read-only Groq AI assistant.
 
 This README describes the current `main` branch. It is a **disposable Vercel demonstration**, with 15 fictional employees and 73 fictional tasks. The `local_setup` branch is intended to retain the original local installation; older Windows, Docker, and PostgreSQL instructions should not be treated as the deployment procedure for this branch.
 

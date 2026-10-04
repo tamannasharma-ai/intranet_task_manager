@@ -49,7 +49,7 @@ def migrate_sqlite_schema() -> None:
 
 migrate_sqlite_schema()
 
-app = FastAPI(title="Continuum")
+app = FastAPI(title="TaskOrbit")
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 app.mount("/vendor", StaticFiles(directory=str(STATIC_DIR / "vendor")), name="vendor")
 

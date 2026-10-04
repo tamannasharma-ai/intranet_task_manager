@@ -1,4 +1,4 @@
-# Continuum diagnosis and free-resource improvement plan
+# TaskOrbit diagnosis and free-resource improvement plan
 
 Reviewed 3 October 2026. Scope: backend, browser code, models, authentication, dependency manifest, and deployment scripts. No application code or existing database data was changed. Tests used an isolated in-memory SQLite database. Production deployment, browser execution, restore capability, and load capacity were not tested.
 
