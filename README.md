@@ -106,30 +106,30 @@ All accounts use **`DemoPass123!`**. Their addresses are fictional `example.com`
 
 ### Administrator
 
-- Avery Morgan — `avery@example.com` — Admin; no manager.
+- Ananya Sharma — `ananya@example.com` — Admin; no manager.
 
 ### Engineering team
 
-- Jordan Ellis — `jordan@example.com` — Reporting Officer; reports to Avery.
-- Taylor Reed — `taylor@example.com` — Junior Engineer; reports to Jordan.
-- Morgan Hayes — `morgan@example.com` — Junior Engineer; reports to Jordan.
-- Quinn Foster — `quinn@example.com` — Project Analyst; reports to Jordan.
-- Jamie Brooks — `jamie@example.com` — Junior Staff; reports to Jordan.
+- Arjun Mehta — `arjun@example.com` — Reporting Officer; reports to Ananya.
+- Neha Verma — `neha@example.com` — Junior Engineer; reports to Arjun.
+- Vikram Rao — `vikram@example.com` — Junior Engineer; reports to Arjun.
+- Ishaan Gupta — `ishaan@example.com` — Project Analyst; reports to Arjun.
+- Pooja Desai — `pooja@example.com` — Junior Staff; reports to Arjun.
 
 ### Operations team
 
-- Riley Bennett — `riley@example.com` — Reporting Officer; reports to Avery.
-- Alex Rowan — `alex@example.com` — Operations Officer; reports to Riley.
-- Cameron Blake — `cameron@example.com` — Junior Ops Officer; reports to Riley.
-- Drew Collins — `drew@example.com` — Project Analyst; reports to Riley.
-- Skyler Lane — `skyler@example.com` — Junior Staff; reports to Riley.
+- Kavya Nair — `kavya@example.com` — Reporting Officer; reports to Ananya.
+- Aditya Menon — `aditya@example.com` — Operations Officer; reports to Kavya.
+- Sneha Kulkarni — `sneha@example.com` — Junior Ops Officer; reports to Kavya.
+- Kunal Joshi — `kunal@example.com` — Project Analyst; reports to Kavya.
+- Divya Reddy — `divya@example.com` — Junior Staff; reports to Kavya.
 
 ### Support team
 
-- Casey Parker — `casey@example.com` — Reporting Officer; reports to Avery.
-- Reese Harper — `reese@example.com` — Finance Officer; reports to Casey.
-- Peyton Wells — `peyton@example.com` — HR Coordinator; reports to Casey.
-- Emerson Gray — `emerson@example.com` — Junior Staff; reports to Casey.
+- Rohan Iyer — `rohan@example.com` — Reporting Officer; reports to Ananya.
+- Nitin Shah — `nitin@example.com` — Finance Officer; reports to Rohan.
+- Meera Singh — `meera@example.com` — HR Coordinator; reports to Rohan.
+- Sanjay Das — `sanjay@example.com` — Junior Staff; reports to Rohan.
 
 ### What is preloaded
 
@@ -139,7 +139,7 @@ Each of the 14 employees with a manager also has an approval assignment and a sh
 
 The four categories are **Send email**, **Take approval**, **Prepare report**, and **Review document**. Tasks include fictional summaries, creation histories, lifecycle transitions, and corresponding activity events. Due dates are relative to instance startup in India time; timestamps are stored in UTC. Dates are not reseeded each midnight on an existing instance.
 
-Try Jordan for delegation and team visibility, Taylor for assigned work and editing, and Avery for all-user reports and employee administration. The administrator's activity log is available through the API rather than a dedicated dashboard page.
+Try Arjun for delegation and team visibility, Neha for assigned work and editing, and Ananya for all-user reports and employee administration. The administrator's activity log is available through the API rather than a dedicated dashboard page.
 
 ## Task views and permissions
 

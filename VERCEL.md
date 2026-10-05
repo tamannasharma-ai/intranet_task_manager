@@ -29,13 +29,13 @@ These exclusions do not remove sensitive files from existing Git history.
 ## Try the demo
 
 Select any of the 15 accounts at /login. All use password `DemoPass123!`.
-Administrator: `avery@example.com`. Reporting officers: `jordan@example.com`,
-`riley@example.com`, and `casey@example.com`. The full fictional roster is in
+Administrator: `ananya@example.com`. Reporting officers: `arjun@example.com`,
+`kavya@example.com`, and `rohan@example.com`. The full fictional roster is in
 app/demo_data.py. Do not upload real employee data to this demonstration.
 AI features still need their separately configured provider credentials.
 
-Use Jordan's account to explore delegation and team hierarchy, Taylor's account
-for manager-assigned and shared work, and Avery's account for all-team reports
+Use Arjun's account to explore delegation and team hierarchy, Neha's account
+for manager-assigned and shared work, and Ananya's account for all-team reports
 and activity logs. Personal work is available for every account. Task Summary,
 PDF exports, and configured AI summaries use the same seeded tasks.
 

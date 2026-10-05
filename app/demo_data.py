@@ -4,21 +4,21 @@ from datetime import datetime, timedelta, timezone
 DEMO_PASSWORD = "DemoPass123!"
 # id, name, email, role, manager_id
 EMPLOYEES = (
-    (1, "Avery Morgan", "avery@example.com", "Admin", None),
-    (2, "Jordan Ellis", "jordan@example.com", "Reporting Officer", 1),
-    (3, "Riley Bennett", "riley@example.com", "Reporting Officer", 1),
-    (4, "Casey Parker", "casey@example.com", "Reporting Officer", 1),
-    (5, "Taylor Reed", "taylor@example.com", "Junior Engineer", 2),
-    (6, "Morgan Hayes", "morgan@example.com", "Junior Engineer", 2),
-    (7, "Quinn Foster", "quinn@example.com", "Project Analyst", 2),
-    (8, "Jamie Brooks", "jamie@example.com", "Junior Staff", 2),
-    (9, "Alex Rowan", "alex@example.com", "Operations Officer", 3),
-    (10, "Cameron Blake", "cameron@example.com", "Junior Ops Officer", 3),
-    (11, "Drew Collins", "drew@example.com", "Project Analyst", 3),
-    (12, "Skyler Lane", "skyler@example.com", "Junior Staff", 3),
-    (13, "Reese Harper", "reese@example.com", "Finance Officer", 4),
-    (14, "Peyton Wells", "peyton@example.com", "HR Coordinator", 4),
-    (15, "Emerson Gray", "emerson@example.com", "Junior Staff", 4),
+    (1, "Ananya Sharma", "ananya@example.com", "Admin", None),
+    (2, "Arjun Mehta", "arjun@example.com", "Reporting Officer", 1),
+    (3, "Kavya Nair", "kavya@example.com", "Reporting Officer", 1),
+    (4, "Rohan Iyer", "rohan@example.com", "Reporting Officer", 1),
+    (5, "Neha Verma", "neha@example.com", "Junior Engineer", 2),
+    (6, "Vikram Rao", "vikram@example.com", "Junior Engineer", 2),
+    (7, "Ishaan Gupta", "ishaan@example.com", "Project Analyst", 2),
+    (8, "Pooja Desai", "pooja@example.com", "Junior Staff", 2),
+    (9, "Aditya Menon", "aditya@example.com", "Operations Officer", 3),
+    (10, "Sneha Kulkarni", "sneha@example.com", "Junior Ops Officer", 3),
+    (11, "Kunal Joshi", "kunal@example.com", "Project Analyst", 3),
+    (12, "Divya Reddy", "divya@example.com", "Junior Staff", 3),
+    (13, "Nitin Shah", "nitin@example.com", "Finance Officer", 4),
+    (14, "Meera Singh", "meera@example.com", "HR Coordinator", 4),
+    (15, "Sanjay Das", "sanjay@example.com", "Junior Staff", 4),
 )
 
 def seed_demo(db):

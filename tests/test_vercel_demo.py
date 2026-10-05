@@ -46,7 +46,7 @@ for user in users:
     if user["id"] in (1, 2, 3, 4):
         for view in ("team-hierarchy", "delegated-by-me"):
             assert client.get("/api/tasks?filter_type=" + view, headers=demo_headers).json(), (user, view)
-response = client.post("/api/auth/login", data={"username": "jordan@example.com", "password": "DemoPass123!"})
+response = client.post("/api/auth/login", data={"username": "arjun@example.com", "password": "DemoPass123!"})
 headers = {"Authorization": "Bearer " + response.json()["access_token"]}
 assert client.get("/dashboard").status_code == 200
 assert client.get("/", follow_redirects=False).headers["location"] == "/dashboard"

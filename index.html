@@ -27,16 +27,16 @@
       <!-- Identity Switcher -->
       <div class="flex items-center space-x-3">
         <div class="text-right hidden sm:block">
-          <p id="current-user-name" class="text-sm font-semibold text-slate-800">Alex Carter</p>
+          <p id="current-user-name" class="text-sm font-semibold text-slate-800">Arjun Mehta</p>
           <p id="current-user-designation" class="text-xs text-indigo-600 font-medium">Reporting Officer (RO)</p>
         </div>
         <select id="user-selector" onchange="switchUser(this.value)" class="text-xs bg-slate-100 border border-slate-300 rounded-md px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium">
-          <option value="alex@internal.net">Login: Alex Carter (Reporting Officer)</option>
+          <option value="arjun@internal.net">Login: Arjun Mehta (Reporting Officer)</option>
           <option value="priya@internal.net">Login: Priya Patel (Junior Engineer)</option>
-          <option value="marcus@internal.net">Login: Marcus Vance (Junior Ops Officer)</option>
+          <option value="vikram@internal.net">Login: Vikram Rao (Junior Ops Officer)</option>
         </select>
         <div class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm border border-indigo-200" id="user-avatar">
-          AC
+          AM
         </div>
       </div>
     </div>
@@ -211,9 +211,9 @@
             <label class="block text-xs font-semibold text-slate-600 mb-1">Share / Collaborator</label>
             <select id="task-sharedwith" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
               <option value="">None (Private)</option>
-              <option value="alex@internal.net">Alex Carter</option>
+              <option value="arjun@internal.net">Arjun Mehta</option>
               <option value="priya@internal.net">Priya Patel</option>
-              <option value="marcus@internal.net">Marcus Vance</option>
+              <option value="vikram@internal.net">Vikram Rao</option>
             </select>
           </div>
         </div>
@@ -271,12 +271,12 @@
   <!-- JAVASCRIPT APP LOGIC -->
   <script>
     const users = {
-      "alex@internal.net": { name: "Alex Carter", designation: "Reporting Officer (RO)", avatar: "AC", manager: null },
-      "priya@internal.net": { name: "Priya Patel", designation: "Junior Engineer", avatar: "PP", manager: "alex@internal.net" },
-      "marcus@internal.net": { name: "Marcus Vance", designation: "Junior Ops Officer", avatar: "MV", manager: "alex@internal.net" }
+      "arjun@internal.net": { name: "Arjun Mehta", designation: "Reporting Officer (RO)", avatar: "AM", manager: null },
+      "priya@internal.net": { name: "Priya Patel", designation: "Junior Engineer", avatar: "PP", manager: "arjun@internal.net" },
+      "vikram@internal.net": { name: "Vikram Rao", designation: "Junior Ops Officer", avatar: "VR", manager: "arjun@internal.net" }
     };
 
-    let currentUser = "alex@internal.net";
+    let currentUser = "arjun@internal.net";
     let activeFilter = "all";
 
     // Format ISO string to readable string
@@ -308,9 +308,9 @@
         id: "TSK-101",
         title: "Hydro Turbine Shaft Alignment Check",
         summary: "Execute dial gauge runout testing on Unit-2 turbine shaft before hydro-mechanical dry run.",
-        creator: "alex@internal.net",
+        creator: "arjun@internal.net",
         assignee: "priya@internal.net",
-        sharedWith: "marcus@internal.net",
+        sharedWith: "vikram@internal.net",
         dueDate: "2026-09-20",
         priority: "High",
         status: "inprogress",
@@ -320,7 +320,7 @@
         history: [
           {
             timestamp: "2026-09-12T09:30:00Z",
-            author: "alex@internal.net",
+            author: "arjun@internal.net",
             action: "Task created and delegated to Priya Patel by RO"
           },
           {
@@ -365,8 +365,8 @@
         id: "TSK-103",
         title: "Transformer SF6 Gas & Pressure Test",
         summary: "Weekly inspection of transformer bushing oil indicators and SF6 pressure.",
-        creator: "alex@internal.net",
-        assignee: "marcus@internal.net",
+        creator: "arjun@internal.net",
+        assignee: "vikram@internal.net",
         sharedWith: "",
         dueDate: "2026-09-22",
         priority: "Medium",
@@ -377,8 +377,8 @@
         history: [
           {
             timestamp: "2026-09-15T07:15:00Z",
-            author: "alex@internal.net",
-            action: "Task created and delegated to Marcus Vance"
+            author: "arjun@internal.net",
+            action: "Task created and delegated to Vikram Rao"
           }
         ]
       }
