@@ -80,6 +80,10 @@ class CollaborationUpdate(BaseModel):
     members: list[TaskMemberIn] = Field(max_length=30)
 
 
+class DependencyCreate(BaseModel):
+    depends_on_id: int = Field(gt=0)
+
+
 class TaskBase(BaseModel):
     title: str = Field(min_length=1, max_length=200)
     summary: Optional[str] = None
@@ -126,6 +130,8 @@ class TaskOut(TaskBase):
     archived_at: Optional[datetime] = None
     deleted_at: Optional[datetime] = None
     recurrence_parent_id: Optional[int] = None
+    dependency_count: int = 0
+    waiting_count: int = 0
 
 class Token(BaseModel):
     access_token: str

@@ -391,6 +391,14 @@ Latest application verification on October 4, 2026: **27 Python tests passed**, 
 
 Coverage includes task visibility/modification, hierarchy updates, import validation, authentication-related behavior, combined summary-column filters, matching PDF results, invalid date ranges, literal text searches, report/PDF scope, AI context boundaries and provider failures, demo seeding idempotency, login for all 15 accounts, and a fresh Vercel-style process. Frontend checks cover independent column pagination, deadline/completion ordering, total badges, page clamping after data changes, empty columns, safe rendering, and logout. Test databases are in-memory and do not connect to a configured external database.
 
+### Search, prerequisites, and mobile navigation
+
+Search matches titles, descriptions, comments, owners, creators, categories and exact task IDs (for example `#4`). Choose Active, Archive or Trash; results always respect your task access. `%` and `_` are literal characters, not wildcards.
+
+Open a task's **Details → Prerequisite tasks** to find and add a prerequisite. Owners and creators can manage links; collaborators can update progress but cannot change dependencies. Unfinished or deleted prerequisites prevent starting or completing a task. Circular links and self-dependencies are rejected. Completed archived prerequisites count as finished. Restricted prerequisites hide their identity. Recurring tasks begin each new occurrence without dependency links; reopening an upstream task does not automatically change downstream statuses.
+
+On phones, use the View selector to change task views. Search, single-column task cards, larger touch targets and scrollable dialogs adapt to narrow screens. Account controls remain available below the workspace. Storage remains temporary; no approval workflow is added.
+
 Key files:
 
 - `app/main.py`: FastAPI routes, access checks, middleware, seeding, and pages.

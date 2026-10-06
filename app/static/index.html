@@ -906,7 +906,11 @@
       document.getElementById('workflow-view').classList.add('hidden');
       if (ai) return loadAIConsole();
       if (summary) return fetchSummary();
-      const res = await fetch(`/api/tasks?filter_type=${activeFilter}`, {
+      const search = activeFilter === 'search';
+      const term = document.getElementById('task-search-query').value.trim();
+      if (search && !term) { currentTasks = []; renderBoard(); return; }
+      const url = search ? `/api/search/tasks?q=${encodeURIComponent(term)}&scope=${document.getElementById('task-search-scope').value}` : `/api/tasks?filter_type=${activeFilter}`;
+      const res = await fetch(url, {
         headers: { "Authorization": "Bearer " + authToken }
       });
       await requireSuccess(res);
@@ -918,6 +922,7 @@
 
     function setFilter(filter) {
       activeFilter = filter;
+      syncMobileView(filter);
       columnPages = {todo: 1, inprogress: 1, blocked: 1, done: 1};
       updateFilterTabStyles();
       fetchTasks().catch(error => alert(error.message));
@@ -935,7 +940,8 @@
         shared: ['Shared with Me', 'Tasks where you are a collaborator or a viewer.'],
         'my-day': ['My Day', 'Your open tasks, grouped by deadline. Start, complete or reschedule in one place.'],
         archive: ['Archive', 'Archived work is retained with its comments and history. Owners can restore it.'],
-        trash: ['Trash', 'Deleted tasks can be restored by their owners for this demo session.']
+        trash: ['Trash', 'Deleted tasks can be restored by their owners for this demo session.'],
+        search: ['Search', 'Search task text, comments, people, categories or a task ID across work you can access.']
       };
       const view = viewLabels[activeFilter] || viewLabels.all;
       document.getElementById('view-title').textContent = view[0];
@@ -1303,5 +1309,6 @@
   </script>
   <script src="/vendor/task-interactions.js?v=1"></script>
   <script src="/vendor/workflow.js?v=1"></script>
+  <script src="/vendor/search-dependencies.js?v=1"></script>
 </body>
 </html>

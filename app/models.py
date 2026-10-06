@@ -65,6 +65,28 @@ class Task(Base):
     history = relationship("TaskHistory", back_populates="task", cascade="all, delete-orphan", order_by="desc(TaskHistory.timestamp)")
     comments = relationship("TaskComment", back_populates="task", cascade="all, delete-orphan")
     members = relationship("TaskMember", cascade="all, delete-orphan", order_by="TaskMember.id")
+    dependency_links = relationship("TaskDependency", foreign_keys="TaskDependency.task_id", cascade="all, delete-orphan")
+
+    @property
+    def dependency_count(self):
+        return len(self.dependency_links)
+
+    @property
+    def waiting_count(self):
+        return sum(not link.satisfied for link in self.dependency_links)
+
+
+class TaskDependency(Base):
+    __tablename__ = "task_dependencies"
+    __table_args__ = (UniqueConstraint("task_id", "depends_on_id"),)
+    id = Column(Integer, primary_key=True)
+    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False, index=True)
+    depends_on_id = Column(Integer, ForeignKey("tasks.id"), nullable=False, index=True)
+    prerequisite = relationship("Task", foreign_keys=[depends_on_id])
+
+    @property
+    def satisfied(self):
+        return self.prerequisite.status == 'done' and self.prerequisite.deleted_at is None
 
 
 class TaskMember(Base):

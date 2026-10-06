@@ -5,7 +5,7 @@ const html = fs.readFileSync('app/static/index.html', 'utf8');
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 scripts.forEach(script => new vm.Script(script));
 const code = scripts.join('\n');
-const context = {document: {createElement: () => ({})}, currentUser: {id: 1, manager_id: 2}};
+const context = {document: {createElement: () => ({})}, currentUser: {id: 1, manager_id: 2}, decorateWorkflowCard: () => {}};
 vm.createContext(context);
 for (const name of ['escapeHtml', 'taskDueLabel', 'createCard', 'localDateToday', 'formatTime', 'logout']) {
   const prefix = name === 'logout' ? '    async function ' : '    function ';
@@ -32,8 +32,9 @@ assert.ok(card.innerHTML.includes('&lt;img'));
 // in every column, including page clamping after completion/deletion.
 const elements = new Map();
 const board = {
+  renderWorkflowView: () => false,
   currentUser: {id: 1}, pageSize: 2,
-  columnPages: {todo: 1, inprogress: 1, done: 1},
+  columnPages: {todo: 1, inprogress: 1, blocked: 1, done: 1},
   currentTasks: [],
   createCard: task => ({taskId: task.id}),
   document: {

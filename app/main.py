@@ -19,8 +19,8 @@ from sqlalchemy import inspect, text, or_
 from typing import List
 
 from app.database import Base, engine, get_db, SessionLocal
-from app.models import User, Task, TaskCategory, ActivityLog, TaskComment, TaskMember, Notification
-from app.schemas import CommentCreate, CommentOut, CollaborationUpdate
+from app.models import User, Task, TaskCategory, ActivityLog, TaskComment, TaskMember, Notification, TaskDependency
+from app.schemas import CommentCreate, CommentOut, CollaborationUpdate, DependencyCreate
 from app import workflow
 from app.schemas import ActivityLogOut, CategoryCreate, CategoryOut, UserOut, TaskOut, TaskCreate, TaskUpdate, Token, PasswordChangeRequest, ManagerUpdate
 from app.auth import get_password_hash, verify_password, create_access_token, get_current_user, get_user_from_token
@@ -620,6 +620,73 @@ def get_task_detail(task_id: int, db: Session = Depends(get_db), current_user: U
     if not task or not can_access_task(db, task, current_user):
         raise HTTPException(404, "Task not found")
     return task
+
+
+@app.get("/api/search/tasks", response_model=list[TaskOut])
+def search_tasks_endpoint(q: str = Query(..., min_length=1, max_length=200), scope: str = 'active',
+                          db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if scope not in {'active', 'archive', 'trash'} or not q.strip():
+        raise HTTPException(422, 'Enter a search term and choose active, archive or trash')
+    query = db.query(Task).filter(workflow.visibility(current_user, get_all_reportee_ids(db, current_user)))
+    if scope == 'trash':
+        query = query.filter(Task.deleted_at.is_not(None))
+    else:
+        query = query.filter(Task.deleted_at.is_(None), Task.archived_at.is_not(None) if scope == 'archive' else Task.archived_at.is_(None))
+    return workflow.search_tasks(query, q).order_by(Task.due_date, Task.id).all()
+
+
+@app.get("/api/tasks/{task_id}/dependencies")
+def list_dependencies(task_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = get_task_detail(task_id, db, current_user)
+    result = []
+    for link in task.dependency_links:
+        prerequisite = link.prerequisite
+        visible = can_access_task(db, prerequisite, current_user) and not prerequisite.deleted_at
+        result.append(dict(link_id=link.id, task_id=prerequisite.id if visible else None,
+                           title=prerequisite.title if visible else 'Restricted or deleted prerequisite',
+                           status=prerequisite.status if visible else None, satisfied=link.satisfied,
+                           archived=bool(prerequisite.archived_at) if visible else False))
+    return result
+
+
+def dependency_owner(db, task_id, current_user):
+    task = comment_task_or_404(db, task_id, current_user)
+    if current_user.id not in {task.assignee_id, task.creator_id}:
+        raise HTTPException(403, 'Only the owner or creator can manage dependencies')
+    if task.archived_at:
+        raise HTTPException(409, 'Restore the task before changing dependencies')
+    return task
+
+
+@app.post("/api/tasks/{task_id}/dependencies")
+def add_dependency(task_id: int, payload: DependencyCreate, request: Request,
+                   db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = dependency_owner(db, task_id, current_user)
+    prerequisite = comment_task_or_404(db, payload.depends_on_id, current_user)
+    if any(link.depends_on_id == prerequisite.id for link in task.dependency_links):
+        return {'message': 'Prerequisite already linked'}
+    workflow.check_dependency(db, task, prerequisite)
+    db.add(TaskDependency(task_id=task.id, depends_on_id=prerequisite.id))
+    workflow.history(db, task, current_user, 'Added a prerequisite task')
+    record_activity(db, 'TASK_DEPENDENCY_ADDED', 'Added task dependency', request=request,
+                    actor=current_user, target_type='task', target_id=task.id)
+    db.commit()
+    return {'message': 'Prerequisite added'}
+
+
+@app.delete("/api/tasks/{task_id}/dependencies/{link_id}")
+def remove_dependency(task_id: int, link_id: int, request: Request,
+                      db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = dependency_owner(db, task_id, current_user)
+    link = db.query(TaskDependency).filter_by(id=link_id, task_id=task.id).first()
+    if not link:
+        raise HTTPException(404, 'Dependency not found')
+    db.delete(link)
+    workflow.history(db, task, current_user, 'Removed a prerequisite task')
+    record_activity(db, 'TASK_DEPENDENCY_REMOVED', 'Removed task dependency', request=request,
+                    actor=current_user, target_type='task', target_id=task.id)
+    db.commit()
+    return {'message': 'Prerequisite removed'}
 
 
 @app.put("/api/tasks/{task_id}/collaboration", response_model=TaskOut)

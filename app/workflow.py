@@ -4,7 +4,7 @@ from datetime import date, datetime, timedelta, timezone
 
 from fastapi import HTTPException
 from sqlalchemy import or_
-from app.models import Notification, Task, TaskHistory, TaskMember, User
+from app.models import Notification, Task, TaskHistory, TaskMember, TaskDependency, TaskComment, TaskCategory, User
 
 
 def today_ist():
@@ -37,6 +37,8 @@ def validate_members(db, members, owner_id, creator_id):
 
 def validate_state(payload, task=None):
     state = payload.status if payload.status is not None else task.status
+    if task and state in {'inprogress', 'done'} and state != task.status and task.waiting_count:
+        raise HTTPException(409, 'Finish the prerequisite tasks before starting or completing this task')
     supplied = payload.model_fields_set
     reason = payload.blocked_reason if 'blocked_reason' in supplied else getattr(task, 'blocked_reason', None)
     if state == 'blocked' and not (reason or '').strip():
@@ -123,3 +125,37 @@ def ensure_reminders(db, user):
                                 message=f'{task.title}: {when}'[:500], dedupe_key=key))
     db.commit()
     return current_keys
+
+
+def search_tasks(query, text):
+    """Literal substring search, scoped by the caller before matching."""
+    text = text.strip()
+    pattern = '%' + text.replace('\\', '\\\\').replace('%', '\\%').replace('_', '\\_') + '%'
+    matches = [Task.title.ilike(pattern, escape='\\'), Task.summary.ilike(pattern, escape='\\'),
+               Task.comments.any(TaskComment.body.ilike(pattern, escape='\\')),
+               Task.creator.has(User.name.ilike(pattern, escape='\\')),
+               Task.assignee.has(User.name.ilike(pattern, escape='\\')),
+               Task.category.has(TaskCategory.name.ilike(pattern, escape='\\'))]
+    identifier = text.lstrip('#')
+    if identifier.isascii() and identifier.isdigit() and len(identifier) <= 10:
+        matches.append(Task.id == int(identifier))
+    return query.filter(or_(*matches))
+
+
+def check_dependency(db, task, prerequisite):
+    if task.id == prerequisite.id:
+        raise HTTPException(422, 'A task cannot depend on itself')
+    if len(task.dependency_links) >= 20:
+        raise HTTPException(422, 'A task can have at most 20 prerequisites')
+    if task.status in {'inprogress', 'done'} and prerequisite.status != 'done':
+        raise HTTPException(409, 'Move this task to To Do or Blocked before adding an unfinished prerequisite')
+    # Follow dependency edges from the prerequisite; reaching this task closes a cycle.
+    pending = [prerequisite.id]
+    visited = set()
+    while pending:
+        current = pending.pop()
+        if current == task.id:
+            raise HTTPException(422, 'This dependency would create a circular chain')
+        if current not in visited:
+            visited.add(current)
+            pending.extend(row[0] for row in db.query(TaskDependency.depends_on_id).filter_by(task_id=current))

@@ -70,7 +70,7 @@ function indiaToday() {
   return `${part('year')}-${part('month')}-${part('day')}`;
 }
 function renderWorkflowView() {
-  if (!['my-day', 'archive', 'trash'].includes(activeFilter)) return false;
+  if (!['my-day', 'archive', 'trash', 'search'].includes(activeFilter)) return false;
   for (const id of ['kanban-board', 'priority-legend', 'pagination-controls']) document.getElementById(id).classList.add('hidden');
   workflowView.classList.remove('hidden'); workflowView.replaceChildren();
   const today = indiaToday();
@@ -78,7 +78,7 @@ function renderWorkflowView() {
     ['Overdue', currentTasks.filter(t => t.due_date < today)],
     ['Due Today', currentTasks.filter(t => t.due_date === today)],
     ['Upcoming', currentTasks.filter(t => t.due_date > today)]
-  ] : [[activeFilter === 'archive' ? 'Archived tasks' : 'Deleted tasks', currentTasks]];
+  ] : [[activeFilter === 'search' ? 'Search results' : activeFilter === 'archive' ? 'Archived tasks' : 'Deleted tasks', currentTasks]];
   const grid = document.createElement('div');
   grid.className = groups.length === 3 ? 'day-groups' : '';
   for (const [label, tasks] of groups) {
@@ -86,7 +86,7 @@ function renderWorkflowView() {
     const heading = document.createElement('h3'); heading.textContent = `${label} · ${tasks.length}`;
     section.append(heading);
     tasks.sort(compareTaskOrder).forEach(task => section.append(createCard(task)));
-    if (!tasks.length) {const empty = document.createElement('p'); empty.textContent = 'No tasks here.'; empty.className = 'text-sm text-slate-500'; section.append(empty);}
+    if (!tasks.length) {const empty = document.createElement('p'); empty.textContent = activeFilter === 'search' ? (document.getElementById('task-search-query').value.trim() ? 'No matching tasks in this scope. Try another term or search Archive or Trash.' : 'Enter a title, comment, person, category or #ID above to search.') : 'No tasks here.'; empty.className = 'text-sm text-slate-500'; section.append(empty);}
     grid.append(section);
   }
   workflowView.append(grid);
@@ -102,6 +102,7 @@ function decorateWorkflowCard(card, task) {
   const parts = [labels[task.status]];
   if (task.recurrence !== 'none') parts.push(`Repeats ${task.recurrence}`);
   if (task.checklist.length) parts.push(`${task.checklist.filter(i => i.done).length}/${task.checklist.length} steps`);
+  if (task.dependency_count) parts.push(task.waiting_count ? `Waiting on ${task.waiting_count} prerequisite${task.waiting_count === 1 ? '' : 's'}` : 'Prerequisites complete');
   meta.textContent = parts.join(' · '); card.append(meta);
   if (task.blocked_reason) {const reason = document.createElement('p'); reason.className = 'text-sm text-rose-700'; reason.textContent = `Blocked: ${task.blocked_reason}`; card.append(reason);}
   if (task.deleted_at) card.querySelector('[aria-label="Task comments"]')?.remove();
@@ -120,6 +121,11 @@ function decorateWorkflowCard(card, task) {
     }
   }
   card.append(actions);
+  if (task.waiting_count) actions.querySelectorAll('button').forEach(button => {
+    if (['Start','Complete'].includes(button.textContent)) {
+      button.disabled = true; button.title = 'Finish prerequisite tasks first. Open Details to see dependencies.';
+    }
+  });
 }
 async function workflowRequest(path, method='GET', payload) {
   const response = await fetch(path, {method, headers:{Authorization:'Bearer '+authToken, 'Content-Type':'application/json'},
@@ -231,6 +237,7 @@ async function openTaskDetails(id) {
     }
     document.getElementById('details-members').querySelector('[type=submit]').disabled = !manage;
     if (!detailsDialog.open) detailsDialog.showModal();
+    await loadTaskDependencies(task, manage, version);
   } catch(error) {alert(error.message);}
 }
 async function saveDetails(event, membership) {
