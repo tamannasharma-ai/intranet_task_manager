@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, JSON, UniqueConstraint
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -49,6 +49,13 @@ class Task(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     started_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
+    blocked_reason = Column(String(1000), nullable=True)
+    recurrence = Column(String(20), nullable=False, default="none")
+    recurrence_day = Column(Integer, nullable=True)
+    recurrence_parent_id = Column(Integer, ForeignKey("tasks.id"), unique=True, nullable=True)
+    checklist = Column(JSON, nullable=False, default=list)
+    archived_at = Column(DateTime, nullable=True)
+    deleted_at = Column(DateTime, nullable=True)
 
     # Relationships
     creator = relationship("User", foreign_keys=[creator_id], back_populates="tasks_created")
@@ -56,6 +63,43 @@ class Task(Base):
     shared_with = relationship("User", foreign_keys=[shared_with_id])
     category = relationship("TaskCategory", back_populates="tasks")
     history = relationship("TaskHistory", back_populates="task", cascade="all, delete-orphan", order_by="desc(TaskHistory.timestamp)")
+    comments = relationship("TaskComment", back_populates="task", cascade="all, delete-orphan")
+    members = relationship("TaskMember", cascade="all, delete-orphan", order_by="TaskMember.id")
+
+
+class TaskMember(Base):
+    __tablename__ = "task_members"
+    __table_args__ = (UniqueConstraint("task_id", "user_id"),)
+    id = Column(Integer, primary_key=True)
+    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    role = Column(String(20), nullable=False)
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    id = Column(Integer, primary_key=True)
+    recipient_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False, index=True)
+    kind = Column(String(30), nullable=False)
+    message = Column(String(500), nullable=False)
+    dedupe_key = Column(String(150), unique=True, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    read_at = Column(DateTime, nullable=True)
+
+
+class TaskComment(Base):
+    __tablename__ = "task_comments"
+
+    id = Column(Integer, primary_key=True)
+    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False, index=True)
+    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    author_name = Column(String(100), nullable=False)
+    body = Column(Text, nullable=False)
+    request_id = Column(String(36), nullable=False, unique=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    task = relationship("Task", back_populates="comments")
 
 class TaskHistory(Base):
     __tablename__ = "task_history"

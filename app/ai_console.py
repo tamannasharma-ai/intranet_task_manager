@@ -18,7 +18,7 @@ _lock = threading.Lock()
 class AIQuestion(BaseModel):
     question: str = Field(default="Summarize tasks, delegation, progress and overdue work.", min_length=1, max_length=2000)
     mode: Literal["question", "summary"] = "question"
-    status: Literal["all", "pending", "todo", "inprogress", "done"] = "all"
+    status: Literal["all", "pending", "todo", "inprogress", "blocked", "done"] = "all"
     assignee_id: int | None = Field(default=None, gt=0)
 
 

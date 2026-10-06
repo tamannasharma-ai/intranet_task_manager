@@ -9,7 +9,7 @@ from sqlalchemy.orm import selectinload
 
 from app.models import Task, User
 
-STATUS_LABELS = {"todo": "To Do", "inprogress": "In Progress", "done": "Done"}
+STATUS_LABELS = {"todo": "To Do", "inprogress": "In Progress", "blocked": "Blocked", "done": "Done"}
 IST = timezone(timedelta(hours=5, minutes=30))
 
 
@@ -31,12 +31,12 @@ def task_summary(db, user, reportee_ids, assignee_id=None, status="all", priorit
     if due_from and due_to and due_from > due_to:
         raise HTTPException(400, "From date must not be after To date")
     query = db.query(Task).options(selectinload(Task.creator), selectinload(Task.assignee))
-    if user.role != "Admin":
-        query = query.filter(or_(Task.assignee_id.in_([user.id, *reportee_ids]), Task.creator_id == user.id))
+    from app.workflow import visibility
+    query = query.filter(visibility(user, reportee_ids), Task.archived_at.is_(None), Task.deleted_at.is_(None))
     if assignee_id is not None:
         query = query.filter(Task.assignee_id == assignee_id)
     if status == "pending":
-        query = query.filter(Task.status.in_(["todo", "inprogress"]))
+        query = query.filter(Task.status.in_(["todo", "inprogress", "blocked"]))
     elif status != "all":
         query = query.filter(Task.status == status)
     if priority != "all":

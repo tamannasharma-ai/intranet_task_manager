@@ -5,10 +5,11 @@ import os
 import threading
 import time
 import uuid
+from datetime import datetime
 from pathlib import Path
 
 from email_validator import EmailNotValidError, validate_email
-from fastapi import FastAPI, Depends, File, Form, HTTPException, Request, Response, UploadFile, status
+from fastapi import FastAPI, Depends, File, Form, HTTPException, Query, Request, Response, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
@@ -18,14 +19,16 @@ from sqlalchemy import inspect, text, or_
 from typing import List
 
 from app.database import Base, engine, get_db, SessionLocal
-from app.models import User, Task, TaskCategory, ActivityLog
+from app.models import User, Task, TaskCategory, ActivityLog, TaskComment, TaskMember, Notification
+from app.schemas import CommentCreate, CommentOut, CollaborationUpdate
+from app import workflow
 from app.schemas import ActivityLogOut, CategoryCreate, CategoryOut, UserOut, TaskOut, TaskCreate, TaskUpdate, Token, PasswordChangeRequest, ManagerUpdate
 from app.auth import get_password_hash, verify_password, create_access_token, get_current_user, get_user_from_token
 import app.crud as crud
 from app.logging_config import logger
 from app.ai_console import AIQuestion
 
-VALID_TASK_FILTERS = {"all", "personal", "assigned-by-ro", "shared", "team-hierarchy", "delegated-by-me"}
+VALID_TASK_FILTERS = {"all", "personal", "assigned-by-ro", "shared", "team-hierarchy", "delegated-by-me", "my-day", "archive", "trash"}
 ALLOWED_EMAIL_DOMAIN = "thdc.co.in"
 APP_ENV = os.getenv("APP_ENV", "development").lower()
 IS_PRODUCTION = APP_ENV == "production" or os.getenv("VERCEL") == "1"
@@ -92,7 +95,7 @@ async def security_headers(request: Request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(self), geolocation=()"
     if IS_PRODUCTION:
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
@@ -199,10 +202,11 @@ def can_assign_task(db: Session, current_user: User, assignee_id: int) -> bool:
     return assignee_id == current_user.id or assignee_id in get_direct_reportee_ids(db, current_user)
 
 def can_access_task(db: Session, task: Task, current_user: User) -> bool:
-    return task.assignee_id in get_visible_task_assignee_ids(db, current_user)
+    return bool(db.query(Task.id).filter(Task.id == task.id,
+        workflow.visibility(current_user, get_all_reportee_ids(db, current_user))).first())
 
 def can_update_task(db: Session, task: Task, current_user: User) -> bool:
-    return task.assignee_id == current_user.id
+    return task.assignee_id == current_user.id or workflow.collaborator(task, current_user)
 
 def can_delete_task(db: Session, task: Task, current_user: User) -> bool:
     return task.assignee_id == current_user.id
@@ -469,7 +473,13 @@ def list_tasks(filter_type: str = "all", db: Session = Depends(get_db), current_
     reportee_ids = get_all_reportee_ids(db, current_user)
 
     # Desk and personal views have the same user-specific scope for all roles.
-    if filter_type == "all":
+    if filter_type in {"archive", "trash"}:
+        query = db.query(Task).filter(workflow.visibility(current_user, reportee_ids))
+    elif filter_type == "my-day":
+        query = db.query(Task).filter(Task.assignee_id == current_user.id, Task.status != "done")
+    elif filter_type == "shared":
+        query = db.query(Task).filter(workflow.shared_clause(current_user.id))
+    elif filter_type == "all":
         query = db.query(Task).filter(
             or_(Task.assignee_id == current_user.id, Task.creator_id == current_user.id),
         )
@@ -484,7 +494,7 @@ def list_tasks(filter_type: str = "all", db: Session = Depends(get_db), current_
     else:
         query = db.query(Task).filter(Task.assignee_id == current_user.id)
 
-    if filter_type in {"all", "personal"}:
+    if filter_type in {"all", "personal", "my-day", "archive", "trash", "shared"}:
         pass
     elif filter_type == "assigned-by-ro":
         query = query.filter(Task.assignee_id == current_user.id, Task.creator_id == current_user.manager_id)
@@ -498,23 +508,80 @@ def list_tasks(filter_type: str = "all", db: Session = Depends(get_db), current_
     elif filter_type == "delegated-by-me":
         query = query.filter(Task.creator_id == current_user.id, Task.assignee_id.in_(reportee_ids))
     
+    if filter_type == "trash":
+        query = query.filter(Task.deleted_at.is_not(None))
+    else:
+        query = query.filter(Task.deleted_at.is_(None))
+        query = query.filter(Task.archived_at.is_not(None) if filter_type == "archive" else Task.archived_at.is_(None))
     return query.order_by(Task.created_at.desc()).all()
 
 @app.post("/api/tasks", response_model=TaskOut)
 def create_new_task(task_in: TaskCreate, request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     validate_task_users(db, task_in, current_user)
+    workflow.validate_state(task_in)
+    workflow.validate_members(db, task_in.members, task_in.assignee_id, current_user.id)
     task = crud.create_task(db=db, task_data=task_in, creator=current_user)
     record_activity(db, "TASK_CREATED", "Created task", request=request, actor=current_user, target_type="task", target_id=task.id, metadata={"assignee_id": task.assignee_id})
     db.commit()
     return task
 
+
+def comment_task_or_404(db: Session, task_id: int, user: User) -> Task:
+    task = db.get(Task, task_id)
+    if not task or task.deleted_at or not can_access_task(db, task, user):
+        raise HTTPException(404, "Task not found")
+    return task
+
+
+@app.get("/api/tasks/{task_id}/comments", response_model=list[CommentOut])
+def list_comments(task_id: int, before_id: int | None = Query(None, gt=0),
+                  limit: int = Query(50, ge=1, le=100),
+                  db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    comment_task_or_404(db, task_id, current_user)
+    query = db.query(TaskComment).filter(TaskComment.task_id == task_id)
+    if before_id is not None:
+        query = query.filter(TaskComment.id < before_id)
+    return query.order_by(TaskComment.id.desc()).limit(limit).all()
+
+
+@app.post("/api/tasks/{task_id}/comments", response_model=CommentOut, status_code=201)
+def post_comment(task_id: int, payload: CommentCreate, request: Request,
+                 db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = comment_task_or_404(db, task_id, current_user)
+    if task.archived_at:
+        raise HTTPException(409, "Restore the task before commenting")
+    if not (current_user.id == task.creator_id or task.assignee_id in get_visible_task_assignee_ids(db, current_user)
+            or workflow.collaborator(task, current_user)):
+        raise HTTPException(403, "Viewers cannot post comments")
+    previous = db.query(TaskComment).filter_by(request_id=str(payload.request_id)).first()
+    if previous:
+        if (previous.task_id, previous.author_id, previous.body) != (task_id, current_user.id, payload.body):
+            raise HTTPException(409, "This submission ID has already been used")
+        return previous
+    comment = TaskComment(task_id=task_id, author_id=current_user.id,
+                          author_name=current_user.name, body=payload.body,
+                          request_id=str(payload.request_id))
+    db.add(comment)
+    record_activity(db, "TASK_COMMENTED", "Added a task comment", request=request,
+                    actor=current_user, target_type="task", target_id=task_id)
+    workflow.notify(db, task, workflow.participants(task), 'comment',
+                    f'{current_user.name} commented on {task.title}', current_user.id)
+    db.commit()
+    db.refresh(comment)
+    return comment
+
 @app.put("/api/tasks/{task_id}", response_model=TaskOut)
 def update_task_endpoint(task_id: int, task_in: TaskUpdate, request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     task = db.query(Task).filter(Task.id == task_id).first()
-    if not task:
+    if not task or task.deleted_at:
         raise HTTPException(status_code=404, detail="Task not found")
     if not can_update_task(db, task, current_user):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed to update this task")
+    if task.archived_at:
+        raise HTTPException(409, "Restore the task before editing")
+    if task.assignee_id != current_user.id and task_in.model_fields_set - {'status', 'blocked_reason', 'checklist'}:
+        raise HTTPException(403, "Collaborators can update status, block reason and checklist only")
+    workflow.validate_state(task_in, task)
     validate_task_users(db, task_in, current_user)
     updated_task = crud.update_task(db=db, task=task, update_data=task_in, user=current_user)
     record_activity(db, "TASK_UPDATED", "Updated task", request=request, actor=current_user, target_type="task", target_id=task.id, metadata={"fields": sorted(task_in.model_fields_set)})
@@ -529,9 +596,10 @@ def delete_task_endpoint(task_id: int, request: Request, db: Session = Depends(g
     if not can_delete_task(db, task, current_user):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed to delete this task")
     record_activity(db, "TASK_DELETED", "Deleted task", request=request, actor=current_user, target_type="task", target_id=task.id, metadata={"title": task.title})
-    db.delete(task)
+    task.deleted_at = datetime.utcnow()
+    workflow.history(db, task, current_user, 'Moved task to Trash')
     db.commit()
-    return {"message": "Task deleted successfully"}
+    return {"message": "Task moved to Trash. You can restore it."}
 
 
 @app.get("/api/admin/activity-logs", response_model=List[ActivityLogOut])
@@ -544,6 +612,94 @@ def list_activity_logs(
     if limit < 1 or limit > 500:
         raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
     return db.query(ActivityLog).order_by(ActivityLog.created_at.desc()).limit(limit).all()
+
+
+@app.get("/api/tasks/{task_id}", response_model=TaskOut)
+def get_task_detail(task_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = db.get(Task, task_id)
+    if not task or not can_access_task(db, task, current_user):
+        raise HTTPException(404, "Task not found")
+    return task
+
+
+@app.put("/api/tasks/{task_id}/collaboration", response_model=TaskOut)
+def update_collaboration(task_id: int, payload: CollaborationUpdate, request: Request,
+                         db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = comment_task_or_404(db, task_id, current_user)
+    if current_user.id not in {task.assignee_id, task.creator_id}:
+        raise HTTPException(403, "Only the owner or creator can manage participants")
+    if task.archived_at:
+        raise HTTPException(409, "Restore the task before changing participants")
+    workflow.validate_members(db, payload.members, task.assignee_id, task.creator_id)
+    previous = workflow.participants(task)
+    task.members.clear()
+    db.flush()
+    task.members = [TaskMember(user_id=m.user_id, role=m.role) for m in payload.members]
+    task.shared_with_id = None  # Explicit roles replace legacy sharing.
+    workflow.history(db, task, current_user, 'Updated collaborators and viewers')
+    workflow.notify(db, task, workflow.participants(task) - previous, 'assignment',
+                    f'You have been added to {task.title}', current_user.id)
+    record_activity(db, 'TASK_PARTICIPANTS_UPDATED', 'Updated task participants', request=request,
+                    actor=current_user, target_type='task', target_id=task.id)
+    db.commit()
+    return task
+
+
+@app.post("/api/tasks/{task_id}/archive", response_model=TaskOut)
+def archive_task(task_id: int, request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = comment_task_or_404(db, task_id, current_user)
+    if not can_delete_task(db, task, current_user):
+        raise HTTPException(403, "Only the task owner can archive it")
+    if not task.archived_at:
+        task.archived_at = datetime.utcnow()
+        workflow.history(db, task, current_user, 'Archived task')
+        record_activity(db, 'TASK_ARCHIVED', 'Archived task', request=request, actor=current_user, target_type='task', target_id=task.id)
+        db.commit()
+    return task
+
+
+@app.post("/api/tasks/{task_id}/restore", response_model=TaskOut)
+def restore_task(task_id: int, request: Request, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    task = get_task_detail(task_id, db, current_user)
+    if not can_delete_task(db, task, current_user):
+        raise HTTPException(403, "Only the task owner can restore it")
+    if task.archived_at or task.deleted_at:
+        task.archived_at = task.deleted_at = None
+        workflow.history(db, task, current_user, 'Restored task to active work')
+        record_activity(db, 'TASK_RESTORED', 'Restored task', request=request, actor=current_user, target_type='task', target_id=task.id)
+        db.commit()
+    return task
+
+
+@app.get("/api/notifications")
+def list_notifications(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    current_reminders = workflow.ensure_reminders(db, current_user)
+    query = db.query(Notification).join(Task, Task.id == Notification.task_id).filter(
+        Notification.recipient_id == current_user.id, Task.deleted_at.is_(None), Task.archived_at.is_(None),
+        workflow.visibility(current_user, get_all_reportee_ids(db, current_user)),
+        or_(Notification.kind != 'reminder', Notification.dedupe_key.in_(current_reminders)))
+    unread = query.filter(Notification.read_at.is_(None)).count()
+    rows = query.order_by(Notification.id.desc()).limit(100).all()
+    return {'unread': unread, 'items': [dict(id=n.id, task_id=n.task_id, kind=n.kind, message=n.message,
+            created_at=n.created_at, read=n.read_at is not None) for n in rows]}
+
+
+@app.post("/api/notifications/read-all")
+def read_all_notifications(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    db.query(Notification).filter(Notification.recipient_id == current_user.id,
+                                  Notification.read_at.is_(None)).update({'read_at': datetime.utcnow()})
+    db.commit()
+    return {'message': 'Notifications marked as read'}
+
+
+@app.post("/api/notifications/{notification_id}/read")
+def read_notification(notification_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    item = db.query(Notification).filter_by(id=notification_id, recipient_id=current_user.id).first()
+    if not item:
+        raise HTTPException(404, 'Notification not found')
+    item.read_at = datetime.utcnow()
+    db.commit()
+    return {'message': 'Notification marked as read'}
 
 @app.get("/")
 def redirect_to_login(request: Request, db: Session = Depends(get_db)):

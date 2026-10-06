@@ -1,6 +1,7 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
-from app.models import Task, TaskCategory, TaskHistory, User
+from app.models import Task, TaskCategory, TaskHistory, TaskMember, User
+from app import workflow
 from app.schemas import TaskCreate, TaskUpdate
 
 def create_task(db: Session, task_data: TaskCreate, creator: User) -> Task:
@@ -24,6 +25,8 @@ def create_task(db: Session, task_data: TaskCreate, creator: User) -> Task:
         completed_at=completed_at,
     )
     db.add(db_task)
+    db_task.members = [TaskMember(user_id=m.user_id, role=m.role) for m in task_data.members]
+    workflow.apply_fields(db, db_task, task_data)
     db.flush()
 
     assignee = db.query(User).filter(User.id == task_data.assignee_id).first()
@@ -37,13 +40,17 @@ def create_task(db: Session, task_data: TaskCreate, creator: User) -> Task:
 
     log = TaskHistory(task_id=db_task.id, author_name=creator.name, action=action_text, timestamp=now)
     db.add(log)
-    db.commit()
-    db.refresh(db_task)
+    workflow.notify_assignment(db, db_task, creator.id)
+    workflow.repeat_after_completion(db, db_task, creator)
+    db.flush()
     return db_task
 
 def update_task(db: Session, task: Task, update_data: TaskUpdate, user: User) -> Task:
     now = datetime.utcnow()
     changes = []
+    old_status = task.status
+    old_assignee = task.assignee_id
+    old_due = task.due_date
 
     # Detect Lifecycle Transitions
     if update_data.status and update_data.status != task.status:
@@ -99,6 +106,17 @@ def update_task(db: Session, task: Task, update_data: TaskUpdate, user: User) ->
         log = TaskHistory(task_id=task.id, author_name=user.name, action="; ".join(changes), timestamp=now)
         db.add(log)
 
-    db.commit()
-    db.refresh(task)
+    extra = update_data.model_fields_set & {'checklist', 'recurrence', 'blocked_reason'}
+    if task.due_date != old_due:
+        task.recurrence_day = datetime.fromisoformat(task.due_date).day
+    workflow.apply_fields(db, task, update_data)
+    if extra:
+        workflow.history(db, task, user, 'Updated ' + ', '.join(sorted(extra)))
+    if task.assignee_id != old_assignee:
+        workflow.notify_assignment(db, task, user.id)
+    if task.status != old_status:
+        workflow.notify(db, task, workflow.participants(task), 'status', f'{task.title}: {task.status}', user.id)
+        if task.status == 'done':
+            workflow.repeat_after_completion(db, task, user)
+    db.flush()
     return task

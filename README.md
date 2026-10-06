@@ -143,7 +143,9 @@ Try Arjun for delegation and team visibility, Neha for assigned work and editing
 
 ## Task views and permissions
 
-**My Desk** shows tasks created by or assigned to the signed-in employee across To Do, In Progress, and Done. Completed work appears alongside pending work. Even the administrator's desk is personal in scope.
+**My Day** is the default view: your unfinished tasks grouped as Overdue, Due Today, and Upcoming, using India time. Cards offer Start, Complete, Reschedule, and Archive.
+
+**My Desk** shows tasks created by or assigned to the signed-in employee across To Do, In Progress, Blocked, and Done. Completed work appears alongside pending work. Even the administrator's desk is personal in scope.
 
 **Personal Tasks** shows tasks both created by and assigned to the current employee, including completed work.
 
@@ -153,22 +155,24 @@ Try Arjun for delegation and team visibility, Neha for assigned work and editing
 
 **Team Hierarchy** includes tasks assigned to direct and indirect reports. Administrators see all tasks through the corresponding **All Users Workload** view. A role label alone does not create reports: hierarchy relationships determine reporting access.
 
-**Shared with Me** exists as the `shared` API filter but is hidden in the current dashboard. It only returns tasks both assigned to and shared with the current employee. Sharing does not grant arbitrary cross-team visibility or editing rights. One optional shared recipient is stored per task.
+**Shared with Me** lists tasks where you are explicitly added as a collaborator or viewer. The legacy shared recipient is treated as a read-only viewer. Use Details > Participants to manage explicit roles.
+
+**Archive** and **Trash** retain tasks, comments and history. Only the owner can archive, move to Trash, or restore a task. These views are excluded from active boards, reports and AI summaries.
 
 ### Assignment and modification rules
 
 - A user may assign a task to themselves or a direct report only. This applies to administrators too.
 - Managers can view descendant workload but cannot assign directly to an indirect report under this rule.
-- Only the current assignee can edit, change status, reassign, or delete a task. Being its creator, reporting officer, or administrator is not an override.
+- The current assignee is the owner and can edit, reassign, archive, delete to Trash, and restore. Collaborators can update status, the blocked reason and checklist, and post comments. Viewers can read only. The creator or owner can manage participants. Reporting managers and administrators retain visibility and commenting rights; these roles do not grant owner edit rights.
 - Reassignment must also satisfy the self/direct-report rule for the user making the change.
 - The sharing field must reference an existing user. Category references must exist.
 - Access is checked by the API; hiding a button is not the only enforcement.
 
 ### Board behavior
 
-The board groups tasks into To Do, In Progress, and Done. Pending cards are sorted by earliest due date (overdue first), then priority, then ID. Done cards show the most recent completion first; missing completion dates follow dated tasks. Each column has independent pagination, with nine tasks per column by default. The page-size selector offers 6, 9, or 15 tasks per column. It applies to each column and resets all three to page one; changing views also resets the pages. Pagination happens in the browser after fetching the matching list. KPI counts cover the entire selected view, and column badges show all tasks in that status regardless of the current page.
+The board groups tasks into To Do, In Progress, Blocked, and Done. Pending cards are sorted by earliest due date (overdue first), then priority, then ID. Done cards show the most recent completion first; missing completion dates follow dated tasks. Each column has independent pagination, with nine tasks per column by default. The page-size selector offers 6, 9, or 15 tasks per column. It applies to each column and resets all four to page one; changing views also resets the pages. Pagination happens in the browser after fetching the matching list. KPI counts cover the entire selected view, and column badges show all tasks in that status regardless of the current page.
 
-Cards show priorities, due-date labels, category, and history. Browser due-date labels use the browser's local date; server reports use India time, so these can differ near midnight for users in other timezones. There is no live push synchronization or background notification system.
+Cards show priorities, due-date labels, category, and history. Browser due-date labels use the browser's local date; server reports use India time, so these can differ near midnight for users in other timezones. The notification bell polls every minute while the page is visible, showing assignments, comments, status changes and daily due reminders. It is in-app only; no email or operating-system push service is used.
 
 ## Task editing and lifecycle
 
@@ -178,12 +182,15 @@ Create or edit a task using a title, summary, due date, assignee, priority, stat
 - Summary: optional; no explicit maximum in the task API schema. AI uses only a truncated excerpt.
 - Due date: required calendar date; past dates are allowed.
 - Priority: exactly `Low`, `Medium`, or `High`.
-- Status: exactly `todo`, `inprogress`, or `done`.
+- Status: `todo`, `inprogress`, `blocked`, or `done`. Blocked tasks require a reason of up to 1,000 characters.
+- Repeat: none, daily, weekly or monthly. Completion creates one next occurrence from the prior due date, preserving month-end scheduling and resetting checklist progress.
+- Checklist: up to 50 steps, each with 1–300 characters.
+- Participants: up to 30 explicit collaborators/viewers. Owner and creator already have access.
 - One assignee, one optional shared recipient, and one optional category per task.
 
 Creation records the creator and timestamp. Starting work records a start time; completing it records completion. Reopening clears completion but retains a previously recorded start time. Creating a task directly as Done may leave its start time empty. These timestamps are lifecycle records, not an active time tracker or timesheet.
 
-The history dialog displays creation/start/completion timestamps and recorded changes. Edits to assignment, priority, category, due date, title, summary, sharing, and status are recorded. Deleting a task deletes its task history; a separate task-deletion activity event remains for the lifetime of the demo instance. There is no undelete feature.
+The history dialog displays creation/start/completion timestamps and recorded changes. Edits to assignment, priority, category, due date, title, summary, sharing, and status are recorded. Deleting moves a task to Trash and preserves history and comments. Restore returns it to active work. All of this remains temporary for the lifetime of the demo process.
 
 ## Employees and categories
 
@@ -327,7 +334,13 @@ Interactive schemas are available at `/docs`; the machine-readable schema is `/o
 - `GET /api/tasks?filter_type=all`: supported filters are `all`, `personal`, `assigned-by-ro`, `delegated-by-me`, `team-hierarchy`, and `shared`.
 - `POST /api/tasks`: create task; fields and assignment restrictions described above.
 - `PUT /api/tasks/{task_id}`: partial task update by its assignee.
-- `DELETE /api/tasks/{task_id}`: delete by its assignee.
+- `DELETE /api/tasks/{task_id}`: move to Trash by its owner.
+- `GET /api/tasks/{task_id}`: permission-scoped details.
+- `PUT /api/tasks/{task_id}/collaboration`: creator/owner manages participants.
+- `POST /api/tasks/{task_id}/archive` and `/restore`: owner-only recovery workflows.
+- `GET /api/notifications`: latest 100 visible notifications and unread count.
+- `POST /api/notifications/read-all` or `/{notification_id}/read`: mark your notifications read.
+- See [VOICE-COMMENTS.md](VOICE-COMMENTS.md) for comments and dictation.
 - `GET /api/reports/tasks`: optional `assignee_id`, `status`, `priority`, `task_text`, `creator_text`, `due_from`, `due_to`, and `overdue` (`all`, `yes`, `no`) filters.
 - `GET /api/reports/tasks.pdf`: same filters, returns PDF bytes.
 - `GET /api/ai/config`: safe configuration flags, model, and setup message; no key value.

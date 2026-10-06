@@ -77,7 +77,7 @@
         </button>
         <button onclick="setFilter('summary')" id="tab-summary" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i><span>Task Summary</span></button>
         <button onclick="setFilter('ai')" id="tab-ai" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>AI Console</span></button>
-        <button onclick="setFilter('shared')" id="tab-shared" class="hidden px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>Shared with Me</span></button>
+        <button onclick="setFilter('shared')" id="tab-shared" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>Shared with Me</span></button>
       </nav>
       <div class="sidebar-account">
         <p class="sidebar-eyebrow">ACCOUNT &amp; TEAM</p>
@@ -139,7 +139,7 @@
       <p id="ai-config-status" role="status" class="text-sm font-semibold text-indigo-700">Checking setup...</p>
       <div class="flex flex-wrap gap-3">
         <label class="text-sm">Employee<select id="ai-employee" class="block border rounded-lg p-2"><option value="">All visible employees</option></select></label>
-        <label class="text-sm">Status<select id="ai-status" class="block border rounded-lg p-2"><option value="all">All statuses</option><option value="pending">Pending</option><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></label>
+        <label class="text-sm">Status<select id="ai-status" class="block border rounded-lg p-2"><option value="all">All statuses</option><option value="pending">Pending</option><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="blocked">Blocked</option><option value="done">Done</option></select></label>
       </div>
       <form id="ai-form" class="space-y-3">
         <label for="ai-question" class="block text-sm font-semibold">Your question</label>
@@ -160,7 +160,7 @@
         <button id="download-summary" onclick="downloadSummaryPdf()" class="bg-indigo-600 text-white rounded-lg px-4 py-2 text-sm">Download PDF</button>
       </div>
       <p id="summary-totals" role="status" class="text-sm text-slate-600"></p>
-      <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100"><tr><th class="p-2">Task</th><th class="p-2">Assigned by</th><th class="p-2">Assigned to</th><th class="p-2">Status</th><th class="p-2">Priority</th><th class="p-2">Due date</th><th class="p-2">Overdue</th></tr><tr><th class="p-2 align-top"><input id="summary-task" aria-label="Filter task title or ID" type="search" maxlength="200" placeholder="Title or #ID" oninput="scheduleSummary()" class="w-full min-w-[130px] border rounded-lg p-2 font-normal" /></th><th class="p-2 align-top"><input id="summary-creator" aria-label="Filter assigned by" type="search" maxlength="200" placeholder="Name" oninput="scheduleSummary()" class="w-full min-w-[130px] border rounded-lg p-2 font-normal" /></th><th class="p-2 align-top"><label class="text-xs font-semibold">Assigned to<select id="summary-employee" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="">All visible employees</option></select></label></th><th class="p-2 align-top"><label class="text-xs font-semibold">Status<select id="summary-status" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="all">All statuses</option><option value="pending">Pending</option><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="done">Done</option></select></label></th><th class="p-2 align-top"><label class="text-xs font-semibold">Priority<select id="summary-priority" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="all">All priorities</option><option>Low</option><option>Medium</option><option>High</option></select></label></th><th class="p-2 align-top"><div class="space-y-1"><input id="summary-due-from" aria-label="Due date from" title="Due date from" type="date" onchange="refreshSummary()" class="border rounded p-1 font-normal" /><input id="summary-due-to" aria-label="Due date to" title="Due date to" type="date" onchange="refreshSummary()" class="border rounded p-1 font-normal" /></div></th><th class="p-2 align-top"><select id="summary-overdue" aria-label="Filter overdue" onchange="refreshSummary()" class="border rounded-lg p-2 font-normal"><option value="all">All</option><option value="yes">Yes</option><option value="no">No</option></select></th></tr></thead><tbody id="summary-rows"></tbody></table></div>
+      <div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="bg-slate-100"><tr><th class="p-2">Task</th><th class="p-2">Assigned by</th><th class="p-2">Assigned to</th><th class="p-2">Status</th><th class="p-2">Priority</th><th class="p-2">Due date</th><th class="p-2">Overdue</th></tr><tr><th class="p-2 align-top"><input id="summary-task" aria-label="Filter task title or ID" type="search" maxlength="200" placeholder="Title or #ID" oninput="scheduleSummary()" class="w-full min-w-[130px] border rounded-lg p-2 font-normal" /></th><th class="p-2 align-top"><input id="summary-creator" aria-label="Filter assigned by" type="search" maxlength="200" placeholder="Name" oninput="scheduleSummary()" class="w-full min-w-[130px] border rounded-lg p-2 font-normal" /></th><th class="p-2 align-top"><label class="text-xs font-semibold">Assigned to<select id="summary-employee" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="">All visible employees</option></select></label></th><th class="p-2 align-top"><label class="text-xs font-semibold">Status<select id="summary-status" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="all">All statuses</option><option value="pending">Pending</option><option value="todo">To Do</option><option value="inprogress">In Progress</option><option value="blocked">Blocked</option><option value="done">Done</option></select></label></th><th class="p-2 align-top"><label class="text-xs font-semibold">Priority<select id="summary-priority" onchange="refreshSummary()" class="block border rounded-lg p-2 mt-1"><option value="all">All priorities</option><option>Low</option><option>Medium</option><option>High</option></select></label></th><th class="p-2 align-top"><div class="space-y-1"><input id="summary-due-from" aria-label="Due date from" title="Due date from" type="date" onchange="refreshSummary()" class="border rounded p-1 font-normal" /><input id="summary-due-to" aria-label="Due date to" title="Due date to" type="date" onchange="refreshSummary()" class="border rounded p-1 font-normal" /></div></th><th class="p-2 align-top"><select id="summary-overdue" aria-label="Filter overdue" onchange="refreshSummary()" class="border rounded-lg p-2 font-normal"><option value="all">All</option><option value="yes">Yes</option><option value="no">No</option></select></th></tr></thead><tbody id="summary-rows"></tbody></table></div>
     </section>
 
     <!-- KANBAN BOARD -->
@@ -258,12 +258,12 @@
         <input type="hidden" id="task-id" />
         
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Title</label>
-          <input type="text" id="task-title" required class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+          <label for="task-title" class="block text-xs font-semibold text-slate-600 mb-1">Title</label>
+          <input type="text" id="task-title" maxlength="200" required class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Summary / Work Notes</label>
+          <label for="task-summary" class="block text-xs font-semibold text-slate-600 mb-1">Summary / Work Notes</label>
           <textarea id="task-summary" rows="2" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
@@ -303,12 +303,12 @@
             <label class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
             <select id="task-status" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
               <option value="todo">To Do</option>
-              <option value="inprogress">In Progress</option>
+              <option value="inprogress">In Progress</option><option value="blocked">Blocked</option>
               <option value="done">Done</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Share / Peer Access</label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Viewer (read-only)</label>
             <select id="task-sharedwith" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"></select>
           </div>
         </div>
@@ -447,8 +447,8 @@
     let allUsers = [];
     let allCategories = [];
     let currentTasks = [];
-    let activeFilter = "all";
-    let columnPages = {todo: 1, inprogress: 1, done: 1};
+    let activeFilter = "my-day";
+    let columnPages = {todo: 1, inprogress: 1, blocked: 1, done: 1};
     let pageSize = 9;
 
     if (!authToken) {
@@ -529,7 +529,7 @@
       document.getElementById("manage-employees-button").classList.toggle("hidden", !isAdmin);
       document.getElementById("tab-team").style.display = isRO ? "flex" : "none";
       document.getElementById("tab-delegated-by-me").style.display = isAdmin ? "none" : (isRO ? "flex" : "none");
-      document.getElementById("tab-shared").style.display = "none";
+      document.getElementById("tab-shared").style.display = "";
       if (isAdmin) {
         document.querySelector("#tab-team span").innerText = "All Users Workload";
       }
@@ -852,7 +852,7 @@
       document.getElementById('kpi-done').textContent = totals.done;
       document.getElementById('kpi-delegated').textContent = '-';
       const body = document.getElementById('summary-rows');
-      const labels = {todo: 'To Do', inprogress: 'In Progress', done: 'Done'};
+      const labels = {todo: 'To Do', inprogress: 'In Progress', blocked: 'Blocked', done: 'Done'};
       data.tasks.forEach(task => {
         const row = document.createElement('tr');
         row.className = 'border-b border-slate-100';
@@ -895,6 +895,7 @@
     }
 
     async function fetchTasks() {
+      const requestId = fetchTasks.requestId = (fetchTasks.requestId || 0) + 1;
       const summary = activeFilter === 'summary';
       const ai = activeFilter === 'ai';
       document.getElementById('ai-panel').classList.toggle('hidden', !ai);
@@ -902,19 +903,22 @@
       document.getElementById('kanban-board').classList.toggle('hidden', summary || ai);
       document.getElementById('priority-legend').classList.toggle('hidden', summary || ai);
       document.getElementById('pagination-controls').classList.toggle('hidden', summary || ai);
+      document.getElementById('workflow-view').classList.add('hidden');
       if (ai) return loadAIConsole();
       if (summary) return fetchSummary();
       const res = await fetch(`/api/tasks?filter_type=${activeFilter}`, {
         headers: { "Authorization": "Bearer " + authToken }
       });
       await requireSuccess(res);
-      currentTasks = await res.json();
+      const tasks = await res.json();
+      if (requestId !== fetchTasks.requestId) return;
+      currentTasks = tasks;
       renderBoard();
     }
 
     function setFilter(filter) {
       activeFilter = filter;
-      columnPages = {todo: 1, inprogress: 1, done: 1};
+      columnPages = {todo: 1, inprogress: 1, blocked: 1, done: 1};
       updateFilterTabStyles();
       fetchTasks().catch(error => alert(error.message));
     }
@@ -928,12 +932,15 @@
         'team-hierarchy': [currentUser?.role === 'Admin' ? 'All Users Workload' : 'Team Workload', 'A clear view of assignments across your reporting hierarchy.'],
         summary: ['Task Summary', 'Explore task status and download a filtered PDF report.'],
         ai: ['AI Console', 'Ask questions and summarize the task information you can access.'],
-        shared: ['Shared with Me', 'Shared task assignments.']
+        shared: ['Shared with Me', 'Tasks where you are a collaborator or a viewer.'],
+        'my-day': ['My Day', 'Your open tasks, grouped by deadline. Start, complete or reschedule in one place.'],
+        archive: ['Archive', 'Archived work is retained with its comments and history. Owners can restore it.'],
+        trash: ['Trash', 'Deleted tasks can be restored by their owners for this demo session.']
       };
       const view = viewLabels[activeFilter] || viewLabels.all;
       document.getElementById('view-title').textContent = view[0];
       document.getElementById('view-description').textContent = view[1];
-      ["all", "personal", "summary", "ai", "assigned-by-ro", "shared", "delegated-by-me", "team"].forEach(tab => {
+      ["my-day", "archive", "trash", "all", "personal", "summary", "ai", "assigned-by-ro", "shared", "delegated-by-me", "team"].forEach(tab => {
         const el = document.getElementById("tab-" + tab);
         if (!el) return;
         if ((tab === "team" && activeFilter === "team-hierarchy") || tab === activeFilter) {
@@ -989,12 +996,13 @@
 
     function changePageSize(value) {
       pageSize = Number(value);
-      columnPages = {todo: 1, inprogress: 1, done: 1};
+      columnPages = {todo: 1, inprogress: 1, blocked: 1, done: 1};
       renderBoard();
     }
 
     function renderBoard() {
-      for (const status of ['todo', 'inprogress', 'done']) {
+      if (renderWorkflowView()) return;
+      for (const status of ['todo', 'inprogress', 'blocked', 'done']) {
         const tasks = getColumnTasks(status);
         const column = document.getElementById(`col-${status}`);
         column.replaceChildren();
@@ -1041,7 +1049,7 @@
 
       const isROTask = task.creator_id !== task.assignee_id && task.creator.id === currentUser.manager_id;
       const isDelegatedByMe = task.creator_id === currentUser.id && task.assignee_id !== currentUser.id;
-      const canModifyTask = task.assignee_id === currentUser.id;
+      const canModifyTask = task.assignee_id === currentUser.id && !task.archived_at && !task.deleted_at;
       const categoryName = task.category?.name || "Uncategorized";
       const due = taskDueLabel(task);
 
@@ -1052,6 +1060,8 @@
             <span class="text-[10px] font-semibold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded">${escapeHtml(categoryName)}</span>
           </div>
           <div class="task-actions flex items-center space-x-2 text-slate-400 text-xs">
+            <button onclick="openTaskDetails(${task.id})" title="Task details and checklist" aria-label="Task details and checklist" class="hover:text-indigo-600">Details</button>
+            <button onclick="openComments(${task.id})" title="Task comments" aria-label="Task comments" class="hover:text-indigo-600"><i class="fa-regular fa-comment" aria-hidden="true"></i> Comments</button>
             <button onclick="viewHistory(${task.id})" title="View task history" aria-label="View task history" class="hover:text-indigo-600 flex items-center gap-1 font-medium text-slate-500">
               <i class="fa-solid fa-clock-rotate-left"></i>
               <span class="text-[10px]">${task.history?.length || 0}</span>
@@ -1082,10 +1092,12 @@
           </div>
         </div>
       `;
+      decorateWorkflowCard(card, task);
       return card;
     }
 
     function openModal(editId = null) {
+      stopDictation();
       document.getElementById("taskModal").classList.remove("hidden");
       const form = document.getElementById("task-form");
       form.reset();
@@ -1129,6 +1141,7 @@
       }
 
       toggleNewCategoryInput();
+      configureTaskExtras(editId ? currentTasks.find(t => t.id === editId) : null);
     }
 
     function populateCategorySelect() {
@@ -1151,11 +1164,13 @@
     }
 
     function closeModal() {
+      stopDictation();
       document.getElementById("taskModal").classList.add("hidden");
     }
 
     async function saveTask(e) {
       e.preventDefault();
+      if (dictationActive()) return;
       const submitButton = e.target.querySelector('button[type="submit"]');
       if (submitButton.disabled) return;
       submitButton.disabled = true;
@@ -1178,7 +1193,8 @@
         status: document.getElementById("task-status").value,
         assignee_id: parseInt(document.getElementById("task-assignee").value),
         shared_with_id: document.getElementById("task-sharedwith").value ? parseInt(document.getElementById("task-sharedwith").value) : null,
-        category_id: categoryId
+        category_id: categoryId,
+        ...collectTaskExtras(id)
       };
 
       const url = id ? `/api/tasks/${id}` : "/api/tasks";
@@ -1196,6 +1212,7 @@
       await requireSuccess(res);
       closeModal();
       await fetchTasks();
+      refreshNotifications();
       } catch (error) {
         alert(error.message || 'Unable to save the task. Please try again.');
       } finally {
@@ -1208,7 +1225,7 @@
     }
 
     async function deleteTask(id) {
-      if (!confirm("Are you sure you want to delete this task?")) return;
+      if (!confirm("Move this task to Trash? You can restore it later.")) return;
       try {
       const res = await fetch(`/api/tasks/${id}`, {
         method: "DELETE",
@@ -1216,6 +1233,7 @@
       });
       await requireSuccess(res);
       await fetchTasks();
+      refreshNotifications();
       } catch (error) {
         alert(error.message || 'Unable to delete the task. Please try again.');
       }
@@ -1278,11 +1296,12 @@
       return str ? str.replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t)) : "";
     }
 
-    if (!authToken || !currentUser || !currentUser.email) {
-      logout();
-    } else {
-      initializeSession();
-    }
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!authToken || !currentUser || !currentUser.email) logout();
+      else initializeSession();
+    });
   </script>
+  <script src="/vendor/task-interactions.js?v=1"></script>
+  <script src="/vendor/workflow.js?v=1"></script>
 </body>
 </html>
